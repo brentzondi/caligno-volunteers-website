@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caligno Volunteers — Regimental Archive</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root{
+    --ink-black:#15170f;
+    --panel:#1d2118;
+    --panel-raised:#262b20;
+    --paper:#d9d3bf;
+    --paper-dim:#a49f8c;
+    --olive:#4a5240;
+    --olive-line:#3a4033;
+    --rust:#a1402c;
+    --rust-bright:#c1502f;
+    --amber:#c39a2e;
+    --green-active:#5c7a4a;
+    --border:#3a3f30;
+    --font-display:'Oswald',sans-serif;
+    --font-body:'Crimson Text',serif;
+    --font-mono:'IBM Plex Mono',monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{
+    background:var(--ink-black);
+    color:var(--paper);
+    font-family:var(--font-body);
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  /* ambient drifting smoke */
+  .smoke-layer{
+    position:fixed;inset:0;
+    pointer-events:none;
+    z-index:0;
+    opacity:0.5;
+    mix-blend-mode:screen;
+  }
+  .smoke-layer svg{width:100%;height:100%;}
+
+  @media (prefers-reduced-motion: reduce){
+    .smoke-layer feTurbulence{animation:none !important;}
+  }
+
+  .wrap{
+    position:relative;
+    z-index:1;
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 24px 80px;
+  }
+
+  /* ============ HERO ============ */
+  header.hero{
+    padding:56px 0 32px;
+    border-bottom:1px solid var(--border);
+    position:relative;
+  }
+  .crest-row{
+    display:flex;
+    align-items:center;
+    gap:24px;
+    margin-bottom:28px;
+  }
+  .crest{
+    width:64px;height:64px;flex-shrink:0;
+    border:2px solid var(--paper-dim);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:22px;
+    color:var(--amber);
+    background:radial-gradient(circle at 30% 30%, var(--panel-raised), var(--panel));
+    letter-spacing:1px;
+  }
+  .designation{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:3px;
+    color:var(--paper-dim);
+    text-transform:uppercase;
+  }
+  h1.regiment-name{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(38px,6vw,64px);
+    letter-spacing:1px;
+    line-height:1;
+    color:var(--paper);
+    text-transform:uppercase;
+    margin:6px 0 8px;
+  }
+  h1.regiment-name .sub{
+    display:block;
+    font-size:0.32em;
+    font-weight:500;
+    letter-spacing:4px;
+    color:var(--amber);
+    margin-top:10px;
+  }
+  .motto{
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--rust-bright);
+    letter-spacing:2px;
+    margin-top:14px;
+    text-transform:uppercase;
+  }
+  .hero-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:32px;
+    margin-top:32px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--paper-dim);
+  }
+  .hero-meta div span{display:block;color:var(--paper);font-size:14px;margin-top:4px;}
+
+  /* ============ NAV TABS ============ */
+  nav.tabs{
+    display:flex;
+    gap:2px;
+    margin-top:0;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    background:var(--ink-black);
+    z-index:5;
+    padding-top:18px;
+  }
+  nav.tabs button{
+    font-family:var(--font-display);
+    font-size:13px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    background:var(--panel);
+    color:var(--paper-dim);
+    border:1px solid var(--border);
+    border-bottom:none;
+    padding:12px 20px 10px;
+    cursor:pointer;
+    position:relative;
+    top:1px;
+    clip-path:polygon(8px 0,100% 0,100% 100%,0 100%);
+    transition:color .15s ease, background .15s ease;
+  }
+  nav.tabs button:hover{color:var(--paper);}
+  nav.tabs button.active{
+    background:var(--panel-raised);
+    color:var(--amber);
+    border-bottom:1px solid var(--panel-raised);
+  }
+
+  section.panel{display:none;padding:40px 0 20px;animation:fadein .3s ease;}
+  section.panel.active{display:block;}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  h2.section-title{
+    font-family:var(--font-display);
+    font-size:26px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--paper);
+    margin-bottom:6px;
+  }
+  p.section-sub{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--paper-dim);
+    margin-bottom:32px;
+    letter-spacing:0.5px;
+  }
+
+  /* ============ HOME / DOSSIER ============ */
+  .dossier-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:40px;
+  }
+  @media (max-width:760px){.dossier-grid{grid-template-columns:1fr;}}
+  .lede{font-size:19px;line-height:1.65;color:var(--paper);}
+  .lede em{color:var(--amber);font-style:normal;}
+  .field-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:20px 22px;
+    margin-bottom:16px;
+  }
+  .field-card h3{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:10px;
+  }
+  .field-card p{font-size:15px;line-height:1.6;color:var(--paper-dim);}
+  .stat-strip{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--border);
+    border:1px solid var(--border);
+    margin:36px 0;
+  }
+  .stat-strip div{
+    background:var(--panel);
+    padding:18px 16px;
+    text-align:center;
+  }
+  .stat-strip .num{
+    font-family:var(--font-display);
+    font-size:28px;
+    color:var(--paper);
+  }
+  .stat-strip .lbl{
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:1.5px;
+    color:var(--paper-dim);
+    text-transform:uppercase;
+    margin-top:4px;
+  }
+
+  /* ============ CHRONICLE / BLOG ============ */
+  .entry-filters{
+    display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;
+  }
+  .entry-filters button{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:transparent;
+    border:1px solid var(--olive-line);
+    color:var(--paper-dim);
+    padding:6px 12px;
+    cursor:pointer;
+  }
+  .entry-filters button.on{border-color:var(--amber);color:var(--amber);}
+
+  .entry{
+    border-left:3px solid var(--olive-line);
+    padding:4px 0 4px 22px;
+    margin-bottom:36px;
+    position:relative;
+  }
+  .entry::before{
+    content:'';
+    position:absolute;left:-7px;top:6px;
+    width:11px;height:11px;
+    border-radius:50%;
+    background:var(--ink-black);
+    border:2px solid var(--amber);
+  }
+  .entry-type{
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--rust-bright);
+  }
+  .entry-title{
+    font-family:var(--font-display);
+    font-size:22px;
+    color:var(--paper);
+    margin:6px 0 4px;
+  }
+  .entry-meta{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--paper-dim);
+    margin-bottom:14px;
+  }
+  .entry-body{font-size:16px;line-height:1.7;color:#c7c2ae;}
+  .entry-body.journal{font-style:italic;}
+  .placeholder-flag{
+    display:inline-block;
+    margin-top:12px;
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:1px;
+    color:var(--paper-dim);
+    border:1px dashed var(--border);
+    padding:3px 8px;
+  }
+
+  /* ============ CODEX / HISTORY ============ */
+  .codex-block{margin-bottom:36px;}
+  .codex-block h3{
+    font-family:var(--font-display);
+    font-size:18px;
+    letter-spacing:0.5px;
+    color:var(--amber);
+    text-transform:uppercase;
+    margin-bottom:10px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:8px;
+  }
+  .codex-block p{font-size:16px;line-height:1.75;color:#c7c2ae;margin-bottom:12px;}
+
+  /* ============ ORDER OF BATTLE ============ */
+  .oob-table{width:100%;border-collapse:collapse;margin-top:8px;}
+  .oob-table th{
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--paper-dim);
+    text-align:left;
+    padding:10px 14px;
+    border-bottom:1px solid var(--border);
+  }
+  .oob-table td{
+    padding:14px;
+    border-bottom:1px solid var(--olive-line);
+    font-size:14px;
+    vertical-align:top;
+  }
+  .oob-table tr:hover td{background:var(--panel);}
+  .unit-name{font-family:var(--font-display);font-size:16px;color:var(--paper);letter-spacing:0.3px;}
+  .unit-role{font-family:var(--font-mono);font-size:11px;color:var(--paper-dim);margin-top:2px;}
+  .loc{font-family:var(--font-mono);font-size:12px;color:#c7c2ae;}
+
+  .stamp{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:1.5px;
+    padding:4px 10px;
+    border:2px solid;
+    border-radius:3px;
+    transform:rotate(-2deg);
+    text-transform:uppercase;
+  }
+  .stamp.active{color:var(--green-active);border-color:var(--green-active);}
+  .stamp.deployed{color:var(--amber);border-color:var(--amber);}
+  .stamp.refit{color:var(--paper-dim);border-color:var(--paper-dim);}
+  .stamp.mia{color:var(--rust-bright);border-color:var(--rust-bright);}
+  .stamp.kia{color:var(--rust);border-color:var(--rust);text-decoration:line-through;}
+
+  footer{
+    margin-top:60px;
+    padding-top:24px;
+    border-top:1px solid var(--border);
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--paper-dim);
+    letter-spacing:1px;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="smoke-layer">
+  <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <filter id="smokeFilter">
+        <feTurbulence id="turb" type="fractalNoise" baseFrequency="0.006 0.012" numOctaves="3" seed="7" result="noise">
+          <animate attributeName="baseFrequency" values="0.006 0.012;0.009 0.016;0.006 0.012" dur="40s" repeatCount="indefinite"/>
+        </feTurbulence>
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.64  0 0 0 0 0.6  0 0 0 0 0.47  0 0 0 0.35 0"/>
+      </filter>
+    </defs>
+    <rect width="800" height="600" filter="url(#smokeFilter)"/>
+  </svg>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="crest-row">
+      <div class="crest">CV</div>
+      <div>
+        <div class="designation">Astra Militarum · Cadian-Pattern Doctrine</div>
+      </div>
+    </div>
+    <h1 class="regiment-name">
+      Caligno Volunteers
+      <span class="sub">The Smokewalkers &middot; 7th Armored Company</span>
+    </h1>
+    <div class="motto">IN CALIGINE, FIDES — In the fog, faith</div>
+
+    <div class="hero-meta">
+      <div>Archive status<span>OPEN — LIVE UPDATE</span></div>
+      <div>Current theater<span>Kasr-19 sector</span></div>
+      <div>Last entry logged<span id="last-updated-display">—</span></div>
+      <div>Maintained by<span>Regimental Chronicler</span></div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button data-panel="home" class="active">Dossier</button>
+    <button data-panel="chronicle">Chronicle</button>
+    <button data-panel="codex">Codex</button>
+    <button data-panel="oob">Order of Battle</button>
+  </nav>
+
+  <!-- ===================== HOME ===================== -->
+  <section class="panel active" id="home">
+    <h2 class="section-title">Regimental Dossier</h2>
+    <p class="section-sub">Placeholder overview — replace with your own framing whenever you're ready.</p>
+
+    <div class="dossier-grid">
+      <div>
+        <p class="lede">
+          The <em>Caligno Volunteers</em> — known informally through the ranks as the
+          <em>Smokewalkers</em> — trace their identity to the fog-bound doctrine of the
+          7th Armored Company: a regiment that fights best when visibility is worst,
+          advancing under cover of smoke, ash, and drifting haze. This archive is the
+          regiment's living record — chronicles from the field, the Codex history of the
+          formation, and the current state of every unit under its banner.
+        </p>
+
+        <div class="stat-strip">
+          <div><div class="num">6</div><div class="lbl">Core Units Tracked</div></div>
+          <div><div class="num">1</div><div class="lbl">Active Theater</div></div>
+          <div><div class="num">4+</div><div class="lbl">Chronicle Entries</div></div>
+        </div>
+
+        <div class="field-card">
+          <h3>What this archive is for</h3>
+          <p>A running record: battle reports as they happen, the deeper lore behind the
+          regiment's founding and organization, and a real-time board of where every unit
+          currently stands. Add to it the way you'd add to a field ledger — after every
+          game, campaign turn, or painting session.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="field-card">
+          <h3>Command Squad</h3>
+          <p>The regiment's command element, carrying the modified standard and directing
+          the 7th Armored's fog-doctrine engagements.</p>
+        </div>
+        <div class="field-card">
+          <h3>Spearhead Armor</h3>
+          <p>A single Rogal Dorn battle tank anchors the company's heavier engagements —
+          currently listed under refit in the Order of Battle.</p>
+        </div>
+        <div class="field-card">
+          <h3>Forward Doctrine</h3>
+          <p>Kasrkin and Tempestus Scions lead close, high-visibility-denial engagements —
+          the tactical heart of the "Smokewalker" reputation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CHRONICLE ===================== -->
+  <section class="panel" id="chronicle">
+    <h2 class="section-title">The Chronicle</h2>
+    <p class="section-sub">Sample entries below — swap in real battle reports, journals, and letters as games happen.</p>
+
+    <div class="entry-filters">
+      <button class="on" data-filter="all">All</button>
+      <button data-filter="Battle Report">Battle Reports</button>
+      <button data-filter="After Action Report">After Action</button>
+      <button data-filter="Soldier's Journal">Journals</button>
+      <button data-filter="Last Letter Home">Last Letters</button>
+      <button data-filter="Casualty Roll">Casualty Rolls</button>
+    </div>
+
+    <div id="entries"></div>
+  </section>
+
+  <!-- ===================== CODEX ===================== -->
+  <section class="panel" id="codex">
+    <h2 class="section-title">Codex: History &amp; Doctrine</h2>
+    <p class="section-sub">Placeholder lore scaffold — expand each block with the regiment's real founding story.</p>
+
+    <div class="codex-block">
+      <h3>Founding</h3>
+      <p>The Caligno Volunteers were raised as part of the 7th Armored Company's
+      expansion doctrine — a formation built around denial-of-visibility tactics,
+      smoke-screen advances, and close-quarters strike doctrine suited to industrial
+      and urban theaters. <span class="placeholder-flag">expand with real founding lore</span></p>
+    </div>
+
+    <div class="codex-block">
+      <h3>Regiment Numbering &amp; Structure</h3>
+      <p>Organized under the 7th Armored Company framing, with attached specialist
+      elements — Kasrkin, Tempestus Scions, Rough Riders — operating alongside the
+      core Cadian Shock Troops line infantry and a single Rogal Dorn as the company's
+      armored spearhead.</p>
+    </div>
+
+    <div class="codex-block">
+      <h3>Unit Markings &amp; Identity</h3>
+      <p>Attached and specialist units carry markings distinguishing them from the
+      Shock Troops baseline, signaling detachment origin and honors earned in the
+      field. <span class="placeholder-flag">add specific marking rationale</span></p>
+    </div>
+
+    <div class="codex-block">
+      <h3>The Name</h3>
+      <p><em>Caligno</em> — from the Latin for fog, mist, or gloom — reflects both the
+      regiment's home world conditions and its signature battlefield doctrine: advance
+      under smoke, strike before the haze clears, vanish before it does.</p>
+    </div>
+  </section>
+
+  <!-- ===================== ORDER OF BATTLE ===================== -->
+  <section class="panel" id="oob">
+    <h2 class="section-title">Order of Battle</h2>
+    <p class="section-sub">Current unit status and location — update this table after every session.</p>
+
+    <table class="oob-table">
+      <thead>
+        <tr><th>Unit</th><th>Status</th><th>Location</th></tr>
+      </thead>
+      <tbody id="oob-body"></tbody>
+    </table>
+  </section>
+
+  <footer>
+    CALIGNO VOLUNTEERS REGIMENTAL ARCHIVE — MAINTAINED BY THE REGIMENTAL CHRONICLER — EDIT THIS DOCUMENT FREELY
+  </footer>
+
+</div>
+
+<script>
+  // ---------- tab switching ----------
+  const tabButtons = document.querySelectorAll('nav.tabs button');
+  const panels = document.querySelectorAll('section.panel');
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabButtons.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.panel).classList.add('active');
+    });
+  });
+
+  // ---------- chronicle data ----------
+  // Edit this array to add real entries. type must match one of the filter buttons above.
+  const entries = [
+    {
+      type: "Battle Report",
+      title: "Action at Extraction Point Kasr-19",
+      meta: "Engagement log — Kasrkin-led rescue action",
+      body: "Kasrkin strike elements moved under cover to relieve the trapped garrison at Kasr-19, screened by smoke and covered by Tempestus Scions on the flank. The extraction held, though not without cost to the forward squad.",
+      journal: false
+    },
+    {
+      type: "Soldier's Journal",
+      title: "Entry — Third night in the ash fields",
+      meta: "Unattributed field journal, recovered",
+      body: "The fog doesn't lift out here. We've stopped waiting for it to. Command says that's the point — we're the ones who see through it, or near enough. I believe them most days.",
+      journal: true
+    },
+    {
+      type: "Last Letter Home",
+      title: "To the family of a Shock Trooper, 2nd Line",
+      meta: "Recovered correspondence, filed with casualty roll",
+      body: "Tell them I made it further than I thought I would, and that the company held the line because of people like the ones standing next to me — not because of anything I did alone.",
+      journal: true
+    },
+    {
+      type: "Casualty Roll",
+      title: "Kasr-19 engagement — losses recorded",
+      meta: "Filed by Regimental Chronicler",
+      body: "Losses sustained during the extraction are recorded here as they are confirmed. This entry is a placeholder — replace with real roll details after each game.",
+      journal: false
+    }
+  ];
+
+  const entriesEl = document.getElementById('entries');
+  function renderEntries(filter){
+    entriesEl.innerHTML = '';
+    entries.filter(e => filter === 'all' || e.type === filter).forEach(e => {
+      const div = document.createElement('div');
+      div.className = 'entry';
+      div.innerHTML = `
+        <div class="entry-type">${e.type}</div>
+        <div class="entry-title">${e.title}</div>
+        <div class="entry-meta">${e.meta}</div>
+        <div class="entry-body ${e.journal ? 'journal' : ''}">${e.body}</div>
+        <div class="placeholder-flag">sample entry — replace with real content</div>
+      `;
+      entriesEl.appendChild(div);
+    });
+  }
+  renderEntries('all');
+
+  document.querySelectorAll('.entry-filters button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.entry-filters button').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      renderEntries(btn.dataset.filter);
+    });
+  });
+
+  // ---------- order of battle data ----------
+  // status: active | deployed | refit | mia | kia
+  const units = [
+    { name: "Command Squad", role: "Regimental command, modified standard", status: "active", location: "Kasr-19 staging ground" },
+    { name: "Kasrkin Strike Team", role: "Elite close-assault infantry", status: "deployed", location: "Extraction Point Kasr-19" },
+    { name: "Tempestus Scions", role: "Forward recon / precision strike", status: "deployed", location: "Kasr-19 flank, forward position" },
+    { name: "Cadian Shock Troops", role: "Line infantry, main body", status: "active", location: "Reserve line, sector 7" },
+    { name: "Rough Riders", role: "Mobile shock cavalry", status: "active", location: "Reserve, staged for counter-charge" },
+    { name: "Rogal Dorn Battle Tank", role: "Armored spearhead", status: "refit", location: "Motor pool" }
+  ];
+
+  const oobBody = document.getElementById('oob-body');
+  units.forEach(u => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div class="unit-name">${u.name}</div><div class="unit-role">${u.role}</div></td>
+      <td><span class="stamp ${u.status}">${u.status}</span></td>
+      <td class="loc">${u.location}</td>
+    `;
+    oobBody.appendChild(tr);
+  });
+
+  // ---------- last updated ----------
+  document.getElementById('last-updated-display').textContent =
+    new Date().toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+</script>
+
+</body>
+</html>
