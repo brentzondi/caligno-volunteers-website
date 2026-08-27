@@ -3,26 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caligno Volunteers — Regimental Archive</title>
+<title>Caligno Hellfighters — Regimental Archive</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
 
   :root{
-    --ink-black:#15170f;
-    --panel:#1d2118;
-    --panel-raised:#262b20;
-    --paper:#d9d3bf;
-    --paper-dim:#a49f8c;
-    --olive:#4a5240;
-    --olive-line:#3a4033;
-    --rust:#a1402c;
-    --rust-bright:#c1502f;
-    --amber:#c39a2e;
-    --green-active:#5c7a4a;
-    --border:#3a3f30;
-    --font-display:'Oswald',sans-serif;
-    --font-body:'Crimson Text',serif;
-    --font-mono:'IBM Plex Mono',monospace;
+  --ink-black:#0c0c0c;      /* page background */
+  --panel:#1a1a1a;          /* card/box backgrounds */
+  --panel-raised:#242424;   /* slightly lighter cards, active tab */
+  --paper:#d8d6d2;          /* main text color (smoke gray) */
+  --paper-dim:#8c8c88;      /* secondary/muted text */
+  --olive:#5a5a56;          /* unused directly, legacy name */
+  --olive-line:#3d3d3a;     /* thin borders, entry timeline line */
+  --rust:#b8360f;           /* KIA stamp, deep flame orange */
+  --rust-bright:#ff5c1a;    /* bright flame orange accent */
+  --amber:#ff8c33;          /* headers/accents, lighter flame orange */
+  --green-active:#7a8a86;   /* "active" status stamp color */
+  --border:#333331;         /* borders, table lines, tab outlines */
   }
 
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -382,20 +379,20 @@
 
   <header class="hero">
     <div class="crest-row">
-      <div class="crest">CV</div>
+      <div class="crest">CH</div>
       <div>
-        <div class="designation">Astra Militarum · Cadian-Pattern Doctrine</div>
+        <div class="designation">Astra Militarum · Armageddon Sector · Caligno Subsector · Caligno Prime</div>
       </div>
     </div>
     <h1 class="regiment-name">
-      Caligno Volunteers
+      The Calignosian Hellfighters Regiement
       <span class="sub">The Smokewalkers &middot; 7th Armored Company</span>
     </h1>
-    <div class="motto">IN CALIGINE, FIDES — In the fog, faith</div>
+    <div class="motto">In Gehenna, Officium et Fides - In the hellfire, faith</div>
 
     <div class="hero-meta">
       <div>Archive status<span>OPEN — LIVE UPDATE</span></div>
-      <div>Current theater<span>Kasr-19 sector</span></div>
+      <div>Current theaters<span>ARMAGEDDON</span></div>
       <div>Last entry logged<span id="last-updated-display">—</span></div>
       <div>Maintained by<span>Regimental Chronicler</span></div>
     </div>
@@ -425,8 +422,8 @@
         </p>
 
         <div class="stat-strip">
-          <div><div class="num">6</div><div class="lbl">Core Units Tracked</div></div>
-          <div><div class="num">1</div><div class="lbl">Active Theater</div></div>
+          <div><div class="num">7</div><div class="lbl">Commands Tracked</div></div>
+          <div><div class="num">1</div><div class="lbl">Active In-Theater</div></div>
           <div><div class="num">4+</div><div class="lbl">Chronicle Entries</div></div>
         </div>
 
