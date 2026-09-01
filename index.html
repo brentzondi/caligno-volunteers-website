@@ -3,23 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caligno Hellfighters — Regimental Archive</title>
+<title>The Calignosian Hellfighters — Regimental Archive</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
 
   :root{
-  --ink-black:#0c0c0c;      /* page background */
-  --panel:#1a1a1a;          /* card/box backgrounds */
-  --panel-raised:#242424;   /* slightly lighter cards, active tab */
-  --paper:#d8d6d2;          /* main text color (smoke gray) */
-  --paper-dim:#8c8c88;      /* secondary/muted text */
-  --olive:#5a5a56;          /* unused directly, legacy name */
-  --olive-line:#3d3d3a;     /* thin borders, entry timeline line */
-  --rust:#b8360f;           /* KIA stamp, deep flame orange */
-  --rust-bright:#ff5c1a;    /* bright flame orange accent */
-  --amber:#ff8c33;          /* headers/accents, lighter flame orange */
-  --green-active:#7a8a86;   /* "active" status stamp color */
-  --border:#333331;         /* borders, table lines, tab outlines */
+    --ink-black:#0c0c0c;
+    --panel:#1a1a1a;
+    --panel-raised:#242424;
+    --paper:#d8d6d2;
+    --paper-dim:#8c8c88;
+    --olive:#5a5a56;
+    --olive-line:#3d3d3a;
+    --rust:#b8360f;
+    --rust-bright:#ff5c1a;
+    --amber:#ff8c33;
+    --green-active:#7a8a86;
+    --border:#333331;
+    --font-display:'Oswald',sans-serif;
+    --font-body:'Crimson Text',serif;
+    --font-mono:'IBM Plex Mono',monospace;
   }
 
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -123,6 +126,26 @@
   }
   .hero-meta div span{display:block;color:var(--paper);font-size:14px;margin-top:4px;}
 
+  .classification{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--rust-bright);
+    border:1px solid var(--rust-bright);
+    padding:4px 10px;
+    margin-bottom:18px;
+  }
+  .log-ref{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--paper-dim);
+    letter-spacing:1px;
+    margin-top:6px;
+  }
+
   /* ============ NAV TABS ============ */
   nav.tabs{
     display:flex;
@@ -185,6 +208,7 @@
     gap:40px;
   }
   @media (max-width:760px){.dossier-grid{grid-template-columns:1fr;}}
+  @media (max-width:520px){.stat-strip{grid-template-columns:repeat(2,1fr);}}
   .lede{font-size:19px;line-height:1.65;color:var(--paper);}
   .lede em{color:var(--amber);font-style:normal;}
   .field-card{
@@ -202,6 +226,113 @@
     margin-bottom:10px;
   }
   .field-card p{font-size:15px;line-height:1.6;color:var(--paper-dim);}
+
+  .comm-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-left:3px solid var(--rust-bright);
+    padding:16px 18px;
+    margin-bottom:14px;
+    position:relative;
+  }
+  .comm-card::before{
+    content:'VOX-TRANSMISSION';
+    display:block;
+    font-family:var(--font-mono);
+    font-size:9px;
+    letter-spacing:2px;
+    color:var(--rust-bright);
+    margin-bottom:10px;
+  }
+  .comm-routing{
+    font-family:var(--font-mono);
+    font-size:10px;
+    color:var(--paper-dim);
+    line-height:1.7;
+    letter-spacing:0.5px;
+  }
+  .comm-routing b{color:var(--paper);font-weight:600;}
+  .comm-subject{
+    font-family:var(--font-display);
+    font-size:15px;
+    color:var(--paper);
+    margin:8px 0 6px;
+    letter-spacing:0.3px;
+  }
+  .comm-snippet{
+    font-size:14px;
+    line-height:1.55;
+    color:#c7c2ae;
+    border-top:1px solid var(--olive-line);
+    padding-top:8px;
+    margin-top:2px;
+  }
+  .comm-priority{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:9px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    padding:2px 7px;
+    border:1px solid var(--amber);
+    color:var(--amber);
+    margin-left:6px;
+  }
+
+  .dispatch-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:20px 22px;
+    margin-bottom:20px;
+  }
+  .dispatch-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  .scope-tag{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:9px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    padding:3px 9px;
+    border:1px solid;
+  }
+  .scope-tag.local{color:var(--green-active);border-color:var(--green-active);}
+  .scope-tag.sector{color:var(--amber);border-color:var(--amber);}
+  .scope-tag.imperium{color:var(--rust-bright);border-color:var(--rust-bright);}
+  .dispatch-date{
+    font-family:var(--font-mono);
+    font-size:10px;
+    color:var(--paper-dim);
+    letter-spacing:0.5px;
+  }
+  .dispatch-title{
+    font-family:var(--font-display);
+    font-size:19px;
+    color:var(--paper);
+    margin-bottom:8px;
+    letter-spacing:0.3px;
+  }
+  .dispatch-body{
+    font-size:15px;
+    line-height:1.65;
+    color:#c7c2ae;
+    margin-bottom:10px;
+  }
+  .dispatch-impact{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--amber);
+    border-top:1px solid var(--olive-line);
+    padding-top:10px;
+    line-height:1.6;
+  }
+  .dispatch-impact b{color:var(--amber);}
   .stat-strip{
     display:grid;
     grid-template-columns:repeat(3,1fr);
@@ -267,6 +398,13 @@
     text-transform:uppercase;
     color:var(--rust-bright);
   }
+  .entry-type.honour{color:var(--amber);}
+  .entry-date{
+    color:var(--paper-dim);
+    letter-spacing:0.5px;
+    text-transform:none;
+    font-size:10px;
+  }
   .entry-title{
     font-family:var(--font-display);
     font-size:22px;
@@ -281,6 +419,16 @@
   }
   .entry-body{font-size:16px;line-height:1.7;color:#c7c2ae;}
   .entry-body.journal{font-style:italic;}
+  .entry-body.vox{
+    font-family:var(--font-mono);
+    font-size:13px;
+    line-height:2;
+    letter-spacing:0.2px;
+    color:#c7c2ae;
+    background:var(--panel);
+    border:1px solid var(--olive-line);
+    padding:14px 16px;
+  }
   .placeholder-flag{
     display:inline-block;
     margin-top:12px;
@@ -346,6 +494,38 @@
   .stamp.refit{color:var(--paper-dim);border-color:var(--paper-dim);}
   .stamp.mia{color:var(--rust-bright);border-color:var(--rust-bright);}
   .stamp.kia{color:var(--rust);border-color:var(--rust);text-decoration:line-through;}
+  .stamp.production{color:var(--amber);border-color:var(--amber);font-size:9px;padding:3px 7px;}
+
+  .muster-count{
+    font-family:var(--font-display);
+    font-size:16px;
+    color:var(--paper);
+    letter-spacing:0.5px;
+  }
+  .muster-count .of{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--paper-dim);
+    letter-spacing:0.5px;
+  }
+  .muster-cell{display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
+
+  .regiment-section{margin-bottom:48px;}
+  .regiment-section-heading{
+    font-family:var(--font-display);
+    font-size:18px;
+    letter-spacing:0.5px;
+    color:var(--amber);
+    text-transform:uppercase;
+    margin-bottom:2px;
+  }
+  .regiment-section-sub{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--paper-dim);
+    margin-bottom:14px;
+    letter-spacing:0.5px;
+  }
 
   footer{
     margin-top:60px;
@@ -368,7 +548,7 @@
         <feTurbulence id="turb" type="fractalNoise" baseFrequency="0.006 0.012" numOctaves="3" seed="7" result="noise">
           <animate attributeName="baseFrequency" values="0.006 0.012;0.009 0.016;0.006 0.012" dur="40s" repeatCount="indefinite"/>
         </feTurbulence>
-        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.64  0 0 0 0 0.6  0 0 0 0 0.47  0 0 0 0.35 0"/>
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0.55  0 0 0 0 0.55  0 0 0 0 0.55  0 0 0 0.35 0"/>
       </filter>
     </defs>
     <rect width="800" height="600" filter="url(#smokeFilter)"/>
@@ -378,96 +558,102 @@
 <div class="wrap">
 
   <header class="hero">
+    <div class="classification">Adeptus Administratum &middot; Record-File &middot; Command Eyes Only</div>
     <div class="crest-row">
-      <div class="crest">CH</div>
+      <div class="crest">
+        <svg viewBox="0 0 100 100" width="38" height="38" fill="var(--amber)">
+          <!-- stylized double-headed eagle, wings spread -->
+          <g>
+            <!-- left wing -->
+            <path d="M50 46 L6 20 L14 34 L2 36 L16 46 L4 50 L20 56 L10 62 L28 62 L38 52 Z"/>
+            <!-- right wing -->
+            <path d="M50 46 L94 20 L86 34 L98 36 L84 46 L96 50 L80 56 L90 62 L72 62 L62 52 Z"/>
+            <!-- body -->
+            <path d="M50 40 L44 58 L38 78 L46 72 L50 84 L54 72 L62 78 L56 58 Z"/>
+            <!-- left head -->
+            <path d="M50 44 C44 44 39 40 36 35 C39 36 42 36 44 34 C42 32 41 29 41 26 C44 29 48 31 50 31 Z"/>
+            <!-- right head -->
+            <path d="M50 44 C56 44 61 40 64 35 C61 36 58 36 56 34 C58 32 59 29 59 26 C56 29 52 31 50 31 Z"/>
+          </g>
+        </svg>
+      </div>
       <div>
-        <div class="designation">Astra Militarum · Armageddon Sector · Caligno Subsector · Caligno Prime</div>
+        <div class="designation">Astra Militarum</div>
+        <div class="log-ref">FILE REF: CGN/CAL-HF/MASTER · TRANSCRIBED UNDER MUNITORUM DIRECTIVE </div>
       </div>
     </div>
     <h1 class="regiment-name">
-      The Calignosian Hellfighters Regiement
-      <span class="sub">The Smokewalkers &middot; 7th Armored Company</span>
+      Calignosian Hellfighters
+      <span class="sub">Calignos System</span>
     </h1>
-    <div class="motto">In Gehenna, Officium et Fides - In the hellfire, faith</div>
+    <div class="motto">"In hell, fighting and faithful"</div>
 
     <div class="hero-meta">
-      <div>Archive status<span>OPEN — LIVE UPDATE</span></div>
-      <div>Current theaters<span>ARMAGEDDON</span></div>
-      <div>Last entry logged<span id="last-updated-display">—</span></div>
-      <div>Maintained by<span>Regimental Chronicler</span></div>
+      <div>File status<span>OPEN — ACTIVE RECORD</span></div>
+      <div>Current theaters<span>Armageddon</span></div>
+      <div>Last log entry<span id="last-updated-display">—</span></div>
+      <div>Filed by<span>Regimental Chronicler-Serf</span></div>
     </div>
   </header>
 
   <nav class="tabs">
-    <button data-panel="home" class="active">Dossier</button>
-    <button data-panel="chronicle">Chronicle</button>
-    <button data-panel="codex">Codex</button>
-    <button data-panel="oob">Order of Battle</button>
+    <button data-panel="home" class="active">Main</button>
+    <button data-panel="chronicle">Field Logbook</button>
+    <button data-panel="codex">Regimental Codex</button>
+    <button data-panel="oob">TO&amp;E</button>
+    <button data-panel="deployment">Formations</button>
+    <button data-panel="dispatches">Calignos News</button>
   </nav>
 
   <!-- ===================== HOME ===================== -->
   <section class="panel active" id="home">
-    <h2 class="section-title">Regimental Dossier</h2>
-    <p class="section-sub">Placeholder overview — replace with your own framing whenever you're ready.</p>
+    <h2 class="section-title">Operational Status</h2>
+    <p class="section-sub">Compiled for command review. Reproduction restricted to authorized Munitorum personnel.</p>
 
     <div class="dossier-grid">
       <div>
         <p class="lede">
-          The <em>Caligno Volunteers</em> — known informally through the ranks as the
-          <em>Smokewalkers</em> — trace their identity to the fog-bound doctrine of the
-          7th Armored Company: a regiment that fights best when visibility is worst,
-          advancing under cover of smoke, ash, and drifting haze. This archive is the
-          regiment's living record — chronicles from the field, the Codex history of the
-          formation, and the current state of every unit under its banner.
+          Current Orders - (WIP)
         </p>
 
         <div class="stat-strip">
-          <div><div class="num">7</div><div class="lbl">Commands Tracked</div></div>
-          <div><div class="num">1</div><div class="lbl">Active In-Theater</div></div>
-          <div><div class="num">4+</div><div class="lbl">Chronicle Entries</div></div>
+          <div><div class="num">312</div><div class="lbl">Personnel Strength</div></div>
+          <div><div class="num">6</div><div class="lbl">Units Under Record</div></div>
+          <div><div class="num">1</div><div class="lbl">Active Theater</div></div>
+          <div><div class="num">7</div><div class="lbl">Engagements Fought</div></div>
+          <div><div class="num">3</div><div class="lbl">Battle Honors</div></div>
+          <div><div class="num">14</div><div class="lbl">Confirmed KIA</div></div>
         </div>
 
         <div class="field-card">
-          <h3>What this archive is for</h3>
-          <p>A running record: battle reports as they happen, the deeper lore behind the
-          regiment's founding and organization, and a real-time board of where every unit
-          currently stands. Add to it the way you'd add to a field ledger — after every
-          game, campaign turn, or painting session.</p>
+          <p>Maintained per standing Munitorum order for continuous field documentation:
+          engagement logs as they are filed, the regiment's founding record and doctrine
+          history, and current disposition of every unit under this banner. This file is
+          updated by the Chronicler-Serf after every engagement, campaign turn, and
+          maintenance cycle, as command requires.</p>
         </div>
       </div>
 
       <div>
-        <div class="field-card">
-          <h3>Command Squad</h3>
-          <p>The regiment's command element, carrying the modified standard and directing
-          the 7th Armored's fog-doctrine engagements.</p>
-        </div>
-        <div class="field-card">
-          <h3>Spearhead Armor</h3>
-          <p>A single Rogal Dorn battle tank anchors the company's heavier engagements —
-          currently listed under refit in the Order of Battle.</p>
-        </div>
-        <div class="field-card">
-          <h3>Forward Doctrine</h3>
-          <p>Kasrkin and Tempestus Scions lead close, high-visibility-denial engagements —
-          the tactical heart of the "Smokewalker" reputation.</p>
-        </div>
+        <h3 style="font-family:var(--font-mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:12px;">
+          Comm Traffic — Munitorum &amp; Command
+        </h3>
+        <div id="comm-traffic"></div>
       </div>
     </div>
   </section>
 
   <!-- ===================== CHRONICLE ===================== -->
   <section class="panel" id="chronicle">
-    <h2 class="section-title">The Chronicle</h2>
-    <p class="section-sub">Sample entries below — swap in real battle reports, journals, and letters as games happen.</p>
+    <h2 class="section-title">Logbook — Filed Entries</h2>
+    <p class="section-sub">Entries filed by rank and designation as received. May contain unsactioned reports.</p>
 
     <div class="entry-filters">
       <button class="on" data-filter="all">All</button>
-      <button data-filter="Battle Report">Battle Reports</button>
+      <button data-filter="Vox Traffic">Vox Net</button>
       <button data-filter="After Action Report">After Action</button>
-      <button data-filter="Soldier's Journal">Journals</button>
-      <button data-filter="Last Letter Home">Last Letters</button>
-      <button data-filter="Casualty Roll">Casualty Rolls</button>
+      <button data-filter="Soldier's Journal,Last Letter">Soldier Accounts</button>
+      <button data-filter="Casualty Roll,Medal Award,Unit Citation">Battle Honours</button>
     </div>
 
     <div id="entries"></div>
@@ -475,55 +661,103 @@
 
   <!-- ===================== CODEX ===================== -->
   <section class="panel" id="codex">
-    <h2 class="section-title">Codex: History &amp; Doctrine</h2>
-    <p class="section-sub">Placeholder lore scaffold — expand each block with the regiment's real founding story.</p>
+    <h2 class="section-title">Regimental Codex — History &amp; Doctrine</h2>
+    <p class="section-sub">Standing record of formation and doctrine, filed for reference by command and Munitorum review. Scaffold entries below pending full transcription.</p>
 
     <div class="codex-block">
-      <h3>Founding</h3>
-      <p>The Caligno Volunteers were raised as part of the 7th Armored Company's
-      expansion doctrine — a formation built around denial-of-visibility tactics,
-      smoke-screen advances, and close-quarters strike doctrine suited to industrial
-      and urban theaters. <span class="placeholder-flag">expand with real founding lore</span></p>
+      <h3>Calinos Culture</h3>
+      <p>The Volunteers
+All districts on Caligno originally consisted of all volunteer civil service and defense personel, 
+especially rooted in fire response and first-responder traditions due the unstable nature of the planet.
+ As the people grew volunteering became unsustainable to keep up with the growing civil and defense activites. So paid proffessional civil work began to supplement volunteers.
+Volunteering is still the only resource in some areas of the planet, and in areas where they are not volunteering is seen as the great duty in addition to normal work.
+It is almost expected that each Calinosian volunteers their time in some way to Calinos Prime, though there are no legal edicts that mandate volunteer service. Calinos society
+views poeple that do not volunteer as "Anchors", a deragotory term meaning implying someone is a weights upon society rather than a benefit.
+The Advisory Tradition
+
+Before formal militarization, the Calino Ashwalkers developed a renowned tradition of sending advisor teams 
+to other industrial and hive worlds. These teams taught civil fire response, emergency medical, hazmat protocols, 
+and structural rescue techniques to worlds with similar environmental challenges.
+This tradition led to the informal shorthand across the Imperium of referring to any Calignosian relief or 
+advisory worker as “Volunteers" — a designation that would later become entrenched in formal regimental nomenclature. 
+It also contributed to the organic civilian veneration phenomenon known as the Ash Watch across worlds the Custodians helped.</p>
     </div>
 
     <div class="codex-block">
-      <h3>Regiment Numbering &amp; Structure</h3>
-      <p>Organized under the 7th Armored Company framing, with attached specialist
-      elements — Kasrkin, Tempestus Scions, Rough Riders — operating alongside the
-      core Cadian Shock Troops line infantry and a single Rogal Dorn as the company's
-      armored spearhead.</p>
+      <h3>Regiment Structure</h3>
+      <p>WIP</p>
     </div>
 
     <div class="codex-block">
       <h3>Unit Markings &amp; Identity</h3>
-      <p>Attached and specialist units carry markings distinguishing them from the
-      Shock Troops baseline, signaling detachment origin and honors earned in the
-      field. <span class="placeholder-flag">add specific marking rationale</span></p>
+      <p>wip <span class="placeholder-flag">add specific marking rationale</span></p>
     </div>
 
     <div class="codex-block">
-      <h3>The Name</h3>
-      <p><em>Caligno</em> — from the Latin for fog, mist, or gloom — reflects both the
-      regiment's home world conditions and its signature battlefield doctrine: advance
-      under smoke, strike before the haze clears, vanish before it does.</p>
+      <h3>Ashwalkers, Smokewalkers — A Note on Usage</h3>
+      <p>wip
+      <span class="placeholder-flag">expand with real usage examples</span></p>
     </div>
   </section>
 
   <!-- ===================== ORDER OF BATTLE ===================== -->
   <section class="panel" id="oob">
-    <h2 class="section-title">Order of Battle</h2>
-    <p class="section-sub">Current unit status and location — update this table after every session.</p>
+    <h2 class="section-title">Table of Organization &amp; Equipment</h2>
+    <p class="section-sub">Operational status, muster strength, and logistical attachment by unit, organized by regiment. Additional regiments will appear here as they are raised and filled out.</p>
 
+    <div id="toe-regiments"></div>
+  </section>
+
+  <!-- ===================== DEPLOYMENT ===================== -->
+  <section class="panel" id="deployment">
+    <h2 class="section-title">Regimental Deployment — Formations of Calignos</h2>
+    <p class="section-sub">High-level disposition across the Army Group's seven regiments, with the Calignosian Hellfighters' internal structure detailed below.</p>
+
+    <div class="stat-strip">
+      <div><div class="num">1 / 7</div><div class="lbl">Regiments Mustering</div></div>
+      <div><div class="num">3</div><div class="lbl">Companies (4th Regt.)</div></div>
+      <div><div class="num">2</div><div class="lbl">Battalions (4th Regt.)</div></div>
+    </div>
+
+    <h3 style="font-family:var(--font-display);font-size:16px;letter-spacing:0.5px;color:var(--amber);text-transform:uppercase;margin:32px 0 12px;border-bottom:1px solid var(--border);padding-bottom:8px;">
+      Sister Regiments — Raised from Calignos
+    </h3>
+    <p style="font-family:var(--font-mono);font-size:11px;color:var(--paper-dim);margin-bottom:16px;">Of the seven regiments raised from Calignos, only the 4th Regiment (Calignosian Hellfighters) is currently standing and mustering. Remaining regiments are recorded here for completeness of the order of precedence.</p>
     <table class="oob-table">
       <thead>
-        <tr><th>Unit</th><th>Status</th><th>Location</th></tr>
+        <tr><th>Regiment</th><th>Designation</th><th>Current Theater</th></tr>
       </thead>
-      <tbody id="oob-body"></tbody>
+      <tbody id="regiments-body"></tbody>
+    </table>
+
+    <h3 style="font-family:var(--font-display);font-size:16px;letter-spacing:0.5px;color:var(--amber);text-transform:uppercase;margin:40px 0 12px;border-bottom:1px solid var(--border);padding-bottom:8px;">
+      4th Regiment (Calignosian Hellfighters) — Internal Structure
+    </h3>
+    <table class="oob-table">
+      <thead>
+        <tr><th>Formation</th><th>Composition</th><th>Current Theater</th></tr>
+      </thead>
+      <tbody id="battalions-body"></tbody>
     </table>
   </section>
 
+  <!-- ===================== DISPATCHES ===================== -->
+  <section class="panel" id="dispatches">
+    <h2 class="section-title">Dispatches — Calignos &amp; The Wider Imperium</h2>
+    <p class="section-sub">Astropathic and Munitorum bulletins bearing on the regiment — homeworld developments, sector directives, and Imperium-wide news relevant to standing orders.</p>
+
+    <div class="entry-filters">
+      <button class="on" data-scope-filter="all">All</button>
+      <button data-scope-filter="Calignos">Calignos</button>
+      <button data-scope-filter="Sector">Sector</button>
+      <button data-scope-filter="Imperium">Imperium-Wide</button>
+    </div>
+
+    <div id="dispatches-list"></div>
+  </section>
+
   <footer>
-    CALIGNO VOLUNTEERS REGIMENTAL ARCHIVE — MAINTAINED BY THE REGIMENTAL CHRONICLER — EDIT THIS DOCUMENT FREELY
+    END OF FILE — SEAL OF CALIGNOS AFFIXED — MAINTAINED BY THE REGIMENTAL CHRONICLER-SERF ON HELLCHIEF'S AUTHORITY
   </footer>
 
 </div>
@@ -543,48 +777,114 @@
 
   // ---------- chronicle data ----------
   // Edit this array to add real entries. type must match one of the filter buttons above.
+  // date = real-world (Terran) date this entry was added, format YYYY-MM-DD.
+  // This is for your own tracking, separate from any in-universe LOG REF — entries
+  // are sorted newest-to-oldest by this field, so you can insert new entries anywhere
+  // in this list and the order will still come out correct.
   const entries = [
-    {
-      type: "Battle Report",
-      title: "Action at Extraction Point Kasr-19",
-      meta: "Engagement log — Kasrkin-led rescue action",
-      body: "Kasrkin strike elements moved under cover to relieve the trapped garrison at Kasr-19, screened by smoke and covered by Tempestus Scions on the flank. The extraction held, though not without cost to the forward squad.",
-      journal: false
-    },
+	{
+	  type: "After Action Report",
+      title: "AFTER-ACTION REPORT — Dugrak Ork Attack on FOB Ember",
+      date: "2026-08-20",
+      body: "S<div class="document-border">
+  <header>
+    <h1>After-Action Report: FOB Ember</h1>
+  </header>
+  // AAR report ends -------------------------------------------------------------------------------------------------------------------
+
+  <section>
+    <h2>Situation at Engagement</h2>
+    <p>The bulk of Company 7's strength was committed elsewhere when the assault came. FOB Ember stood held by the majority of 1st Platoon: one squad of the Hotshots, the command element, and two units of Calignosian Hazechargers screening the perimeter, under the acting authority of Platoon Commander Ansel Draeth. Against them came Warboss Dugrak and the hard core of his warband &mdash; survivors of Swift Ash, come back for what they'd lost.</p>
+  </section>
+
+  <section>
+    <h2>The Perimeter</h2>
+    <p>The Hazechargers took the first shock, screening the outer stations against a force that outnumbered them badly. They gave ground the way cavalry is meant to &mdash; grudgingly, and at a price. By the midpoint of the engagement, both squads had been gutted. Wounded where the medics could reach them, dead where they could not.</p>
+    <p>With the perimeter effectively broken and no reinforcement in sight, Commander Draeth made the call every officer dreads and every officer is trained to make: withdraw. Consolidate what remained. Live to hold the next line instead of dying on this one.</p>
+    <p>The order went out. The Hotshots did not follow it.</p>
+  </section>
+
+  <section>
+    <h2>The Last Stand</h2>
+    <p>Lt Kellen Voss and his Hotshots squad held position atop the main structure as the withdrawal order came through, and stayed. Whether it was Voss's call alone or the squad's to a man, this office cannot say with certainty &mdash; only that not one of them fell back.</p>
+    <p>They met the Ork advance in melee atop the FOB's central structure, the last high ground in the compound, and they did not yield it. What followed was close, brutal, and without mercy on either side &mdash; hellpistols and combat blades against choppas and sheer weight of numbers, fought at arm's length in the ash and smoke until there was no one left standing to report how it ended.</p>
+    <p>It ended the only way it could. Every Hotshot who stayed atop that structure died there. But they did not die quickly, and they did not die for nothing &mdash; Dugrak's warband paid in blood and time for every meter of that rooftop, time the withdrawing elements used to disengage clean and time the wider counterattack needed to close the distance.</p>
+  </section>
+
+  <section>
+    <h2>Outcome</h2>
+    <p>FOB Ember fell. It did not fall fast, and it did not fall cheap. This office records the outcome as a strategic success purchased at severe cost &mdash; the delay bought by Voss and the Hotshots, layered atop the price already paid by the Hazechargers, denied Dugrak the clean victory he came for and gave Company 7 the window it needed to respond.</p>
+  </section>
+
+  <section class="commanders-note">
+    <h2>Commander's Note</h2>
+    <p>Commander Draeth gave the order a commander is supposed to give. Sergeant Voss and his Hotshots made the choice a soldier is never ordered to make. Both were right. That is the hard truth of this one, and this office will not pretend otherwise.</p>
+    <p>Voss and his squad held that rooftop until there was nothing left to hold it with. Their names go into the rolls with the weight they've earned. The regiment does not forget who bought this time, or what it cost.</p>
+  </section>
+  // AAR Report ends ------------------------------------------------------------------------------------------------------------------
+
+  <footer>
+    The Emperor Protects.
+  </footer>
+</div>
+ 
+</body>
+	
+",
+      journal: true
+	}
+  
+	{type: "Vox Traffic",
+      title: "FOB EMBER TO 407th, 1ST BATTALION COMMAND"
+      date: "2026-08-19",
+      body: "[Lt. Vorne] Vorne to Command, contact report. Visual on hostile Ork force approaching. Platoon sized element with light support. Requesting instructions.<br>[CPT Brenticles] Vorne, this is Captain Brenticles. Hold FOB Ember through all hell. Reinforcements will be enroute direct.<br>[Lt. Vorne] We'll show them the meaning.",
+      journal: false,
+      vox: true
+	},
     {
       type: "Soldier's Journal",
       title: "Entry — Third night in the ash fields",
-      meta: "Unattributed field journal, recovered",
+      date: "2026-08-26",
+      meta: "LOG REF: CGN-SJ-0091 · FILED BY: Unattributed, recovered from field kit · CLEARANCE: Chaplaincy Review",
       body: "The fog doesn't lift out here. We've stopped waiting for it to. Command says that's the point — we're the ones who see through it, or near enough. I believe them most days.",
       journal: true
     },
     {
       type: "Last Letter Home",
       title: "To the family of a Shock Trooper, 2nd Line",
-      meta: "Recovered correspondence, filed with casualty roll",
+      date: "2026-08-27",
+      meta: "LOG REF: CGN-LL-0091 · FILED BY: Regimental Chaplaincy, with Casualty Roll CGN-CR-0104 · CLEARANCE: Next of Kin",
       body: "Tell them I made it further than I thought I would, and that the company held the line because of people like the ones standing next to me — not because of anything I did alone.",
       journal: true
     },
     {
       type: "Casualty Roll",
       title: "Kasr-19 engagement — losses recorded",
-      meta: "Filed by Regimental Chronicler",
-      body: "Losses sustained during the extraction are recorded here as they are confirmed. This entry is a placeholder — replace with real roll details after each game.",
+      date: "2026-08-29",
+      meta: "LOG REF: CGN-CR-0104 · FILED BY: Regimental Chronicler-Serf · CLEARANCE: Command",
+      body: "Losses sustained during the extraction are recorded here as they are confirmed and cross-referenced against Munitorum manifest. This entry is a placeholder — replace with verified roll details after each engagement.",
       journal: false
     }
   ];
 
   const entriesEl = document.getElementById('entries');
+  function sortedEntries(){
+    return [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+  function formatDate(iso){
+    return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+  }
   function renderEntries(filter){
     entriesEl.innerHTML = '';
-    entries.filter(e => filter === 'all' || e.type === filter).forEach(e => {
+    const wanted = filter.split(',');
+    sortedEntries().filter(e => filter === 'all' || wanted.includes(e.type)).forEach(e => {
       const div = document.createElement('div');
       div.className = 'entry';
       div.innerHTML = `
-        <div class="entry-type">${e.type}</div>
+        <div class="entry-type">${e.type} <span class="entry-date">— logged ${formatDate(e.date)}</span></div>
         <div class="entry-title">${e.title}</div>
         <div class="entry-meta">${e.meta}</div>
-        <div class="entry-body ${e.journal ? 'journal' : ''}">${e.body}</div>
+        <div class="entry-body ${e.journal ? 'journal' : ''} ${e.vox ? 'vox' : ''}">${e.body}</div>
         <div class="placeholder-flag">sample entry — replace with real content</div>
       `;
       entriesEl.appendChild(div);
@@ -592,34 +892,239 @@
   }
   renderEntries('all');
 
-  document.querySelectorAll('.entry-filters button').forEach(btn => {
+  // ---------- comm traffic (derived from 3 most recent log entries, by date) ----------
+  function parseMeta(meta){
+    const filedByMatch = meta.match(/FILED BY:\s*([^·]+)/);
+    const clearanceMatch = meta.match(/CLEARANCE:\s*([^·]+)/);
+    const refMatch = meta.match(/LOG REF:\s*([^·]+)/);
+    return {
+      filedBy: filedByMatch ? filedByMatch[1].trim() : 'Unattributed',
+      clearance: clearanceMatch ? clearanceMatch[1].trim() : 'Unrestricted',
+      ref: refMatch ? refMatch[1].trim() : '—'
+    };
+  }
+
+  function renderCommTraffic(){
+    const el = document.getElementById('comm-traffic');
+    if (!el) return;
+
+    const fromEntries = entries.map(e => ({ kind: 'entry', date: e.date, title: e.title, body: e.body, meta: e.meta }));
+    const fromDispatches = dispatches.map(d => ({ kind: 'dispatch', date: d.date, title: d.title, body: d.body, scope: d.scope }));
+
+    const combined = [...fromEntries, ...fromDispatches]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 3);
+
+    el.innerHTML = combined.map(item => {
+      const snippet = item.body.length > 130 ? item.body.slice(0, 130).trim() + '…' : item.body;
+
+      if (item.kind === 'entry') {
+        const { filedBy, clearance, ref } = parseMeta(item.meta);
+        return `
+          <div class="comm-card">
+            <div class="comm-routing">
+              TO: <b>MUNITORUM SECTOR COMMAND</b><br>
+              FROM: <b>${filedBy}</b><br>
+              REF: ${ref} &nbsp;<span class="comm-priority">${clearance}</span>
+            </div>
+            <div class="comm-subject">RE: ${item.title}</div>
+            <div class="comm-snippet">${snippet}</div>
+          </div>
+        `;
+      }
+
+      const scopeLabel = item.scope === 'Calignos' ? 'Calignos' : item.scope === 'Sector' ? 'Sector' : 'Imperium-Wide';
+      return `
+        <div class="comm-card">
+          <div class="comm-routing">
+            TO: <b>MUNITORUM SECTOR COMMAND</b><br>
+            FROM: <b>Astropathic Relay</b><br>
+            SCOPE: ${scopeLabel} &nbsp;<span class="comm-priority">Dispatch</span>
+          </div>
+          <div class="comm-subject">RE: ${item.title}</div>
+          <div class="comm-snippet">${snippet}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  // renderCommTraffic() is called further down, after `dispatches` is declared.
+
+  // ---------- dispatches: Calignos / sector / Imperium-wide news ----------
+  // scope: "Calignos" | "Sector" | "Imperium"
+  // impact: a short note on how this bears on the regiment — omit the field to leave it off the card
+  const dispatches = [
+    {
+      scope: "Calignos",
+      title: "Munitorum planetary levy extended for a second regimental cycle",
+      date: "2026-08-20",
+      body: "The Departmento Munitorum has renewed its levy order on Calignos, authorizing continued regimental musters beyond the original single-cycle grant. Local tithe officials report the world's manufactory output remains sufficient to equip newly raised formations.",
+      impact: "Directly enables further regiments (5th–7th) to eventually be raised alongside the 4th."
+    },
+    {
+      scope: "Sector",
+      title: "Increased hostile activity reported along the Kasr approach corridors",
+      date: "2026-08-25",
+      body: "Sector command has issued a heightened-alert bulletin for all formations operating near the Kasr approach corridors, citing a marked increase in enemy incursions over the preceding weeks.",
+      impact: "Basis for the 4th Regiment's current deployment to the Kasr-19 sector."
+    },
+    {
+      scope: "Imperium",
+      title: "Standard Munitorum record-keeping directive reissued (7/Ash)",
+      date: "2026-08-18",
+      body: "The Administratum has reissued Directive 7/Ash governing standard field-record transcription for line regiments, formalizing requirements for battle reports, casualty rolls, and correspondence handling across the Imperium.",
+      impact: "This archive is maintained in compliance with the reissued directive."
+    }
+  ];
+
+  function renderDispatches(filter){
+    const el = document.getElementById('dispatches-list');
+    if (!el) return;
+    el.innerHTML = '';
+    const sorted = [...dispatches].sort((a, b) => new Date(b.date) - new Date(a.date));
+    sorted.filter(d => filter === 'all' || d.scope === filter).forEach(d => {
+      const scopeClass = d.scope === 'Calignos' ? 'local' : d.scope === 'Sector' ? 'sector' : 'imperium';
+      const scopeLabel = d.scope === 'Calignos' ? 'Calignos' : d.scope === 'Sector' ? 'Sector' : 'Imperium-Wide';
+      const div = document.createElement('div');
+      div.className = 'dispatch-card';
+      div.innerHTML = `
+        <div class="dispatch-top">
+          <span class="scope-tag ${scopeClass}">${scopeLabel}</span>
+          <span class="dispatch-date">${formatDate(d.date)}</span>
+        </div>
+        <div class="dispatch-title">${d.title}</div>
+        <div class="dispatch-body">${d.body}</div>
+        ${d.impact ? `<div class="dispatch-impact"><b>BEARING ON THE REGIMENT:</b> ${d.impact}</div>` : ''}
+      `;
+      el.appendChild(div);
+    });
+  }
+  renderDispatches('all');
+  renderCommTraffic();
+
+  document.querySelectorAll('#dispatches .entry-filters button').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.entry-filters button').forEach(b => b.classList.remove('on'));
+      document.querySelectorAll('#dispatches .entry-filters button').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      renderDispatches(btn.dataset.scopeFilter);
+    });
+  });
+
+  document.querySelectorAll('#chronicle .entry-filters button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#chronicle .entry-filters button').forEach(b => b.classList.remove('on'));
       btn.classList.add('on');
       renderEntries(btn.dataset.filter);
     });
   });
 
-  // ---------- order of battle data ----------
+  // ---------- order of battle data, organized by regiment ----------
   // status: active | deployed | refit | mia | kia
-  const units = [
-    { name: "Command Squad", role: "Regimental command, modified standard", status: "active", location: "Kasr-19 staging ground" },
-    { name: "Kasrkin Strike Team", role: "Elite close-assault infantry", status: "deployed", location: "Extraction Point Kasr-19" },
-    { name: "Tempestus Scions", role: "Forward recon / precision strike", status: "deployed", location: "Kasr-19 flank, forward position" },
-    { name: "Cadian Shock Troops", role: "Line infantry, main body", status: "active", location: "Reserve line, sector 7" },
-    { name: "Rough Riders", role: "Mobile shock cavalry", status: "active", location: "Reserve, staged for counter-charge" },
-    { name: "Rogal Dorn Battle Tank", role: "Armored spearhead", status: "refit", location: "Motor pool" }
+  // quantity: { total: models requisitioned, building: still in production/unfinished }
+  // attachment: company/battalion assignment (logistics, not battlefield location)
+  //
+  // To add another regiment once it's raised and filled out, just add a new
+  // entry to this object — a new section will appear automatically.
+  const unitsByRegiment = {
+    "4th Regiment — Calignosian Hellfighters": {
+      subtitle: "Currently the only regiment raised from Calignos standing and mustering",
+      units: [
+        { name: "Command Squad", role: "Regimental command, modified standard", status: "active", attachment: "HQ Element, 1st Company",
+          quantity: { total: 6, building: 0 } },
+        { name: "Kasrkin Strike Team", role: "Elite close-assault infantry", status: "deployed", attachment: "1st Company, Alpha Battalion",
+          quantity: { total: 10, building: 0 } },
+        { name: "Tempestus Scions", role: "Forward recon / precision strike", status: "deployed", attachment: "Attached, Munitorum Special Detachment",
+          quantity: { total: 5, building: 2 } },
+        { name: "Cadian Shock Troops", role: "Line infantry, main body", status: "active", attachment: "2nd Company, Alpha Battalion",
+          quantity: { total: 20, building: 0 } },
+        { name: "Rough Riders", role: "Mobile shock cavalry", status: "active", attachment: "2nd Company, Beta Battalion",
+          quantity: { total: 5, building: 3 } },
+        { name: "Rogal Dorn Battle Tank", role: "Armored spearhead", status: "refit", attachment: "3rd Company, Armored Section",
+          quantity: { total: 1, building: 1 } }
+      ]
+    }
+    // "5th Regiment — [Name]": { subtitle: "...", units: [ ... ] },
+  };
+
+  const toeContainer = document.getElementById('toe-regiments');
+  Object.entries(unitsByRegiment).forEach(([regimentName, regimentData]) => {
+    const section = document.createElement('div');
+    section.className = 'regiment-section';
+
+    const table = document.createElement('table');
+    table.className = 'oob-table';
+    const tbody = document.createElement('tbody');
+
+    regimentData.units.forEach(u => {
+      const tr = document.createElement('tr');
+      const ready = u.quantity.total - u.quantity.building;
+      const productionBadge = u.quantity.building > 0
+        ? `<span class="stamp production">${u.quantity.building} in production</span>`
+        : '';
+      tr.innerHTML = `
+        <td><div class="unit-name">${u.name}</div><div class="unit-role">${u.role}</div></td>
+        <td><span class="stamp ${u.status}">${u.status}</span></td>
+        <td>
+          <div class="muster-cell">
+            <div class="muster-count">${ready} <span class="of">/ ${u.quantity.total} mustered</span></div>
+            ${productionBadge}
+          </div>
+        </td>
+        <td class="loc">${u.attachment}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    section.innerHTML = `
+      <div class="regiment-section-heading">${regimentName}</div>
+      <div class="regiment-section-sub">${regimentData.subtitle}</div>
+    `;
+    table.innerHTML = `
+      <thead><tr><th>Unit Designation</th><th>Operational Status</th><th>Muster Strength</th><th>Attachment</th></tr></thead>
+    `;
+    table.appendChild(tbody);
+    section.appendChild(table);
+    toeContainer.appendChild(section);
+  });
+
+  // ---------- deployment: sister regiments & internal structure ----------
+  const regiments = [
+    { name: "72nd Reclamation Corps", nickname: "The Salvagers", designation: "CGN-R1", theater: "Ashfall reclamation zone", ours: false },
+    { name: "3rd Kasr Draconis Armored", nickname: "", designation: "CGN-R2", theater: "Not yet raised", ours: false },
+    { name: "9th Ashveil Rangers", nickname: "", designation: "CGN-R3", theater: "Not yet raised", ours: false },
+    { name: "Calignosian Hellfighters", nickname: "", designation: "CGN-R4 (ours)", theater: "Kasr-19 sector", ours: true },
+    { name: "14th Munitorum Logistics Auxilia", nickname: "", designation: "CGN-R5", theater: "Not yet raised", ours: false },
+    { name: "21st Voss Line Infantry", nickname: "", designation: "CGN-R6", theater: "Not yet raised", ours: false },
+    { name: "5th Kasr Alacrin Rifles", nickname: "", designation: "CGN-R7", theater: "Not yet raised", ours: false }
   ];
 
-  const oobBody = document.getElementById('oob-body');
-  units.forEach(u => {
+  const regimentsBody = document.getElementById('regiments-body');
+  regiments.forEach(r => {
+    const tr = document.createElement('tr');
+    const displayName = r.nickname ? `${r.name} <span style="color:var(--paper-dim);font-family:var(--font-mono);font-size:11px;">"${r.nickname}"</span>` : r.name;
+    tr.innerHTML = `
+      <td><div class="unit-name" ${r.ours ? `style="color:var(--amber);"` : ''}>${displayName}${r.ours ? ' <span class="stamp production" style="margin-left:6px;">this regiment</span>' : ''}</div></td>
+      <td class="loc">${r.designation}</td>
+      <td class="loc">${r.theater}</td>
+    `;
+    regimentsBody.appendChild(tr);
+  });
+
+  const battalions = [
+    { formation: "1st Company", composition: "Command Squad, Kasrkin Strike Team", theater: "Kasr-19 staging ground" },
+    { formation: "2nd Company, Alpha Battalion", composition: "Cadian Shock Troops (main body)", theater: "Reserve line, sector 7" },
+    { formation: "2nd Company, Beta Battalion", composition: "Rough Riders", theater: "Staged for counter-charge" },
+    { formation: "3rd Company, Armored Section", composition: "Rogal Dorn Battle Tank", theater: "Motor pool" },
+    { formation: "Munitorum Special Detachment", composition: "Tempestus Scions (attached)", theater: "Kasr-19 flank, forward position" }
+  ];
+  const battalionsBody = document.getElementById('battalions-body');
+  battalions.forEach(b => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><div class="unit-name">${u.name}</div><div class="unit-role">${u.role}</div></td>
-      <td><span class="stamp ${u.status}">${u.status}</span></td>
-      <td class="loc">${u.location}</td>
+      <td><div class="unit-name">${b.formation}</div></td>
+      <td class="loc">${b.composition}</td>
+      <td class="loc">${b.theater}</td>
     `;
-    oobBody.appendChild(tr);
+    battalionsBody.appendChild(tr);
   });
 
   // ---------- last updated ----------
