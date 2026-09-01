@@ -776,12 +776,16 @@ It also contributed to the organic civilian veneration phenomenon known as the A
   });
 
   // ---------- chronicle data ----------
+  // Edit this array to add real entries. type must match one of the filter buttons above.
+  // date = real-world (Terran) date this entry was added, format YYYY-MM-DD.
+  // This is for your own tracking, separate from any in-universe LOG REF — entries
+  // are sorted newest-to-oldest by this field, so you can insert new entries anywhere
+  // in this list and the order will still come out correct.
   const entries = [
-    {
-      type: "After Action Report",
+	{
+	  type: "After Action Report",
       title: "AFTER-ACTION REPORT — Dugrak Ork Attack on FOB Ember",
       date: "2026-08-20",
-      meta: "LOG REF: CGN-AAR-0042 · FILED BY: CPT Brenticles · CLEARANCE: Command Eyes Only",
       body: `<div class="document-border">
   <header>
     <h1>After-Action Report: FOB Ember</h1>
@@ -822,16 +826,15 @@ It also contributed to the organic civilian veneration phenomenon known as the A
   </footer>
 </div>`,
       journal: true
-    },
-    {
-      type: "Vox Traffic",
+	}
+  
+	{type: "Vox Traffic",
       title: "FOB EMBER TO 407th, 1ST BATTALION COMMAND",
       date: "2026-08-19",
-      meta: "LOG REF: CGN-VX-0112 · TRANSCRIPT RECORD",
       body: "[Lt. Vorne] Vorne to Command, contact report. Visual on hostile Ork force approaching. Platoon sized element with light support. Requesting instructions.<br>[CPT Brenticles] Vorne, this is Captain Brenticles. Hold FOB Ember through all hell. Reinforcements will be enroute direct.<br>[Lt. Vorne] We'll show them the meaning.",
       journal: false,
       vox: true
-    },
+	},
     {
       type: "Soldier's Journal",
       title: "Entry — Third night in the ash fields",
@@ -859,15 +862,12 @@ It also contributed to the organic civilian veneration phenomenon known as the A
   ];
 
   const entriesEl = document.getElementById('entries');
-  
   function sortedEntries(){
     return [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
   }
-  
   function formatDate(iso){
     return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
   }
-  
   function renderEntries(filter){
     entriesEl.innerHTML = '';
     const wanted = filter.split(',');
@@ -877,31 +877,254 @@ It also contributed to the organic civilian veneration phenomenon known as the A
       div.innerHTML = `
         <div class="entry-type">${e.type} <span class="entry-date">— logged ${formatDate(e.date)}</span></div>
         <div class="entry-title">${e.title}</div>
-        <div class="entry-meta">${e.meta || ''}</div>
+        <div class="entry-meta">${e.meta}</div>
         <div class="entry-body ${e.journal ? 'journal' : ''} ${e.vox ? 'vox' : ''}">${e.body}</div>
+        <div class="placeholder-flag">sample entry — replace with real content</div>
       `;
       entriesEl.appendChild(div);
     });
   }
-
-  // Initial render
   renderEntries('all');
 
-  // Filter button handlers
-  const filterBtns = document.querySelectorAll('.entry-filters button[data-filter]');
-  filterBtns.forEach(btn => {
+  // ---------- comm traffic (derived from 3 most recent log entries, by date) ----------
+  function parseMeta(meta){
+    const filedByMatch = meta.match(/FILED BY:\s*([^·]+)/);
+    const clearanceMatch = meta.match(/CLEARANCE:\s*([^·]+)/);
+    const refMatch = meta.match(/LOG REF:\s*([^·]+)/);
+    return {
+      filedBy: filedByMatch ? filedByMatch[1].trim() : 'Unattributed',
+      clearance: clearanceMatch ? clearanceMatch[1].trim() : 'Unrestricted',
+      ref: refMatch ? refMatch[1].trim() : '—'
+    };
+  }
+
+  function renderCommTraffic(){
+    const el = document.getElementById('comm-traffic');
+    if (!el) return;
+
+    const fromEntries = entries.map(e => ({ kind: 'entry', date: e.date, title: e.title, body: e.body, meta: e.meta }));
+    const fromDispatches = dispatches.map(d => ({ kind: 'dispatch', date: d.date, title: d.title, body: d.body, scope: d.scope }));
+
+    const combined = [...fromEntries, ...fromDispatches]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 3);
+
+    el.innerHTML = combined.map(item => {
+      const snippet = item.body.length > 130 ? item.body.slice(0, 130).trim() + '…' : item.body;
+
+      if (item.kind === 'entry') {
+        const { filedBy, clearance, ref } = parseMeta(item.meta);
+        return `
+          <div class="comm-card">
+            <div class="comm-routing">
+              TO: <b>MUNITORUM SECTOR COMMAND</b><br>
+              FROM: <b>${filedBy}</b><br>
+              REF: ${ref} &nbsp;<span class="comm-priority">${clearance}</span>
+            </div>
+            <div class="comm-subject">RE: ${item.title}</div>
+            <div class="comm-snippet">${snippet}</div>
+          </div>
+        `;
+      }
+
+      const scopeLabel = item.scope === 'Calignos' ? 'Calignos' : item.scope === 'Sector' ? 'Sector' : 'Imperium-Wide';
+      return `
+        <div class="comm-card">
+          <div class="comm-routing">
+            TO: <b>MUNITORUM SECTOR COMMAND</b><br>
+            FROM: <b>Astropathic Relay</b><br>
+            SCOPE: ${scopeLabel} &nbsp;<span class="comm-priority">Dispatch</span>
+          </div>
+          <div class="comm-subject">RE: ${item.title}</div>
+          <div class="comm-snippet">${snippet}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  // renderCommTraffic() is called further down, after `dispatches` is declared.
+
+  // ---------- dispatches: Calignos / sector / Imperium-wide news ----------
+  // scope: "Calignos" | "Sector" | "Imperium"
+  // impact: a short note on how this bears on the regiment — omit the field to leave it off the card
+  const dispatches = [
+    {
+      scope: "Calignos",
+      title: "Munitorum planetary levy extended for a second regimental cycle",
+      date: "2026-08-20",
+      body: "The Departmento Munitorum has renewed its levy order on Calignos, authorizing continued regimental musters beyond the original single-cycle grant. Local tithe officials report the world's manufactory output remains sufficient to equip newly raised formations.",
+      impact: "Directly enables further regiments (5th–7th) to eventually be raised alongside the 4th."
+    },
+    {
+      scope: "Sector",
+      title: "Increased hostile activity reported along the Kasr approach corridors",
+      date: "2026-08-25",
+      body: "Sector command has issued a heightened-alert bulletin for all formations operating near the Kasr approach corridors, citing a marked increase in enemy incursions over the preceding weeks.",
+      impact: "Basis for the 4th Regiment's current deployment to the Kasr-19 sector."
+    },
+    {
+      scope: "Imperium",
+      title: "Standard Munitorum record-keeping directive reissued (7/Ash)",
+      date: "2026-08-18",
+      body: "The Administratum has reissued Directive 7/Ash governing standard field-record transcription for line regiments, formalizing requirements for battle reports, casualty rolls, and correspondence handling across the Imperium.",
+      impact: "This archive is maintained in compliance with the reissued directive."
+    }
+  ];
+
+  function renderDispatches(filter){
+    const el = document.getElementById('dispatches-list');
+    if (!el) return;
+    el.innerHTML = '';
+    const sorted = [...dispatches].sort((a, b) => new Date(b.date) - new Date(a.date));
+    sorted.filter(d => filter === 'all' || d.scope === filter).forEach(d => {
+      const scopeClass = d.scope === 'Calignos' ? 'local' : d.scope === 'Sector' ? 'sector' : 'imperium';
+      const scopeLabel = d.scope === 'Calignos' ? 'Calignos' : d.scope === 'Sector' ? 'Sector' : 'Imperium-Wide';
+      const div = document.createElement('div');
+      div.className = 'dispatch-card';
+      div.innerHTML = `
+        <div class="dispatch-top">
+          <span class="scope-tag ${scopeClass}">${scopeLabel}</span>
+          <span class="dispatch-date">${formatDate(d.date)}</span>
+        </div>
+        <div class="dispatch-title">${d.title}</div>
+        <div class="dispatch-body">${d.body}</div>
+        ${d.impact ? `<div class="dispatch-impact"><b>BEARING ON THE REGIMENT:</b> ${d.impact}</div>` : ''}
+      `;
+      el.appendChild(div);
+    });
+  }
+  renderDispatches('all');
+  renderCommTraffic();
+
+  document.querySelectorAll('#dispatches .entry-filters button').forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('on'));
+      document.querySelectorAll('#dispatches .entry-filters button').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      renderDispatches(btn.dataset.scopeFilter);
+    });
+  });
+
+  document.querySelectorAll('#chronicle .entry-filters button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#chronicle .entry-filters button').forEach(b => b.classList.remove('on'));
       btn.classList.add('on');
       renderEntries(btn.dataset.filter);
     });
   });
 
-  // Display latest log date in header
-  if(entries.length > 0) {
-    const latestDate = sortedEntries()[0].date;
-    document.getElementById('last-updated-display').innerText = formatDate(latestDate);
-  }
+  // ---------- order of battle data, organized by regiment ----------
+  // status: active | deployed | refit | mia | kia
+  // quantity: { total: models requisitioned, building: still in production/unfinished }
+  // attachment: company/battalion assignment (logistics, not battlefield location)
+  //
+  // To add another regiment once it's raised and filled out, just add a new
+  // entry to this object — a new section will appear automatically.
+  const unitsByRegiment = {
+    "4th Regiment — Calignosian Hellfighters": {
+      subtitle: "Currently the only regiment raised from Calignos standing and mustering",
+      units: [
+        { name: "Command Squad", role: "Regimental command, modified standard", status: "active", attachment: "HQ Element, 1st Company",
+          quantity: { total: 6, building: 0 } },
+        { name: "Kasrkin Strike Team", role: "Elite close-assault infantry", status: "deployed", attachment: "1st Company, Alpha Battalion",
+          quantity: { total: 10, building: 0 } },
+        { name: "Tempestus Scions", role: "Forward recon / precision strike", status: "deployed", attachment: "Attached, Munitorum Special Detachment",
+          quantity: { total: 5, building: 2 } },
+        { name: "Cadian Shock Troops", role: "Line infantry, main body", status: "active", attachment: "2nd Company, Alpha Battalion",
+          quantity: { total: 20, building: 0 } },
+        { name: "Rough Riders", role: "Mobile shock cavalry", status: "active", attachment: "2nd Company, Beta Battalion",
+          quantity: { total: 5, building: 3 } },
+        { name: "Rogal Dorn Battle Tank", role: "Armored spearhead", status: "refit", attachment: "3rd Company, Armored Section",
+          quantity: { total: 1, building: 1 } }
+      ]
+    }
+    // "5th Regiment — [Name]": { subtitle: "...", units: [ ... ] },
+  };
+
+  const toeContainer = document.getElementById('toe-regiments');
+  Object.entries(unitsByRegiment).forEach(([regimentName, regimentData]) => {
+    const section = document.createElement('div');
+    section.className = 'regiment-section';
+
+    const table = document.createElement('table');
+    table.className = 'oob-table';
+    const tbody = document.createElement('tbody');
+
+    regimentData.units.forEach(u => {
+      const tr = document.createElement('tr');
+      const ready = u.quantity.total - u.quantity.building;
+      const productionBadge = u.quantity.building > 0
+        ? `<span class="stamp production">${u.quantity.building} in production</span>`
+        : '';
+      tr.innerHTML = `
+        <td><div class="unit-name">${u.name}</div><div class="unit-role">${u.role}</div></td>
+        <td><span class="stamp ${u.status}">${u.status}</span></td>
+        <td>
+          <div class="muster-cell">
+            <div class="muster-count">${ready} <span class="of">/ ${u.quantity.total} mustered</span></div>
+            ${productionBadge}
+          </div>
+        </td>
+        <td class="loc">${u.attachment}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    section.innerHTML = `
+      <div class="regiment-section-heading">${regimentName}</div>
+      <div class="regiment-section-sub">${regimentData.subtitle}</div>
+    `;
+    table.innerHTML = `
+      <thead><tr><th>Unit Designation</th><th>Operational Status</th><th>Muster Strength</th><th>Attachment</th></tr></thead>
+    `;
+    table.appendChild(tbody);
+    section.appendChild(table);
+    toeContainer.appendChild(section);
+  });
+
+  // ---------- deployment: sister regiments & internal structure ----------
+  const regiments = [
+    { name: "72nd Reclamation Corps", nickname: "The Salvagers", designation: "CGN-R1", theater: "Ashfall reclamation zone", ours: false },
+    { name: "3rd Kasr Draconis Armored", nickname: "", designation: "CGN-R2", theater: "Not yet raised", ours: false },
+    { name: "9th Ashveil Rangers", nickname: "", designation: "CGN-R3", theater: "Not yet raised", ours: false },
+    { name: "Calignosian Hellfighters", nickname: "", designation: "CGN-R4 (ours)", theater: "Kasr-19 sector", ours: true },
+    { name: "14th Munitorum Logistics Auxilia", nickname: "", designation: "CGN-R5", theater: "Not yet raised", ours: false },
+    { name: "21st Voss Line Infantry", nickname: "", designation: "CGN-R6", theater: "Not yet raised", ours: false },
+    { name: "5th Kasr Alacrin Rifles", nickname: "", designation: "CGN-R7", theater: "Not yet raised", ours: false }
+  ];
+
+  const regimentsBody = document.getElementById('regiments-body');
+  regiments.forEach(r => {
+    const tr = document.createElement('tr');
+    const displayName = r.nickname ? `${r.name} <span style="color:var(--paper-dim);font-family:var(--font-mono);font-size:11px;">"${r.nickname}"</span>` : r.name;
+    tr.innerHTML = `
+      <td><div class="unit-name" ${r.ours ? `style="color:var(--amber);"` : ''}>${displayName}${r.ours ? ' <span class="stamp production" style="margin-left:6px;">this regiment</span>' : ''}</div></td>
+      <td class="loc">${r.designation}</td>
+      <td class="loc">${r.theater}</td>
+    `;
+    regimentsBody.appendChild(tr);
+  });
+
+  const battalions = [
+    { formation: "1st Company", composition: "Command Squad, Kasrkin Strike Team", theater: "Kasr-19 staging ground" },
+    { formation: "2nd Company, Alpha Battalion", composition: "Cadian Shock Troops (main body)", theater: "Reserve line, sector 7" },
+    { formation: "2nd Company, Beta Battalion", composition: "Rough Riders", theater: "Staged for counter-charge" },
+    { formation: "3rd Company, Armored Section", composition: "Rogal Dorn Battle Tank", theater: "Motor pool" },
+    { formation: "Munitorum Special Detachment", composition: "Tempestus Scions (attached)", theater: "Kasr-19 flank, forward position" }
+  ];
+  const battalionsBody = document.getElementById('battalions-body');
+  battalions.forEach(b => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div class="unit-name">${b.formation}</div></td>
+      <td class="loc">${b.composition}</td>
+      <td class="loc">${b.theater}</td>
+    `;
+    battalionsBody.appendChild(tr);
+  });
+
+  // ---------- last updated ----------
+  document.getElementById('last-updated-display').textContent =
+    new Date().toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
 </script>
+
 </body>
 </html>
