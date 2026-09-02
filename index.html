@@ -652,7 +652,7 @@
       <button class="on" data-filter="all">All</button>
       <button data-filter="Vox Traffic">Vox Net</button>
       <button data-filter="After Action Report">After Action</button>
-      <button data-filter="Soldier's Journal,Last Letter">Soldier Accounts</button>
+      <button data-filter="Soldier's Journal,Last Letter Home">Soldier Accounts</button>
       <button data-filter="Casualty Roll,Medal Award,Unit Citation">Battle Honours</button>
     </div>
 
@@ -833,14 +833,13 @@
     The Emperor Protects.
   </footer>
 </div>`,
-      journal: true
+      journal: false
     },
     {
       type: "Vox Traffic",
       title: "FOB EMBER TO 407th, 1ST BATTALION COMMAND",
       date: "2026-08-19",
       body: "[LT Vorne] Vorne to Command, contact report. Visual on hostile Ork force approaching. Platoon sized element with light support. Requesting instructions.<br>[CPT Brenticles] Vorne, this is Captain Brenticles. Hold FOB Ember through all hell. Reinforcements will be enroute direct.<br>[LT Vorne] We'll show them the meaning.",
-      journal: true,
       vox: true
     },
     {
@@ -879,6 +878,23 @@
     return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
   }
   
+  function renderVoxBody(raw){
+    const palette = ['var(--amber)', 'var(--rust-bright)', 'var(--green-active)', 'var(--paper)'];
+    const speakerColors = {};
+    let nextColor = 0;
+    return raw.split(/<br\s*\/?>/i).map(line => {
+      const match = line.match(/^\s*\[([^\]]+)\]/);
+      if (!match) return line;
+      const speaker = match[1];
+      if (!(speaker in speakerColors)) {
+        speakerColors[speaker] = palette[nextColor % palette.length];
+        nextColor++;
+      }
+      const rest = line.slice(match[0].length);
+      return `<span style="color:${speakerColors[speaker]};"><b>[${speaker}]</b>${rest}</span>`;
+    }).join('<br>');
+  }
+
   function renderEntries(filter){
     entriesEl.innerHTML = '';
     const wanted = filter.split(',');
@@ -889,7 +905,7 @@
         <div class="entry-type">${e.type} <span class="entry-date">— logged ${formatDate(e.date)}</span></div>
         <div class="entry-title">${e.title}</div>
         <div class="entry-meta">${e.meta || ''}</div>
-        <div class="entry-body ${e.journal ? 'journal' : ''} ${e.vox ? 'vox' : ''}">${e.body}</div>
+        <div class="entry-body ${e.journal ? 'journal' : ''} ${e.vox ? 'vox' : ''}">${e.vox ? renderVoxBody(e.body) : e.body}</div>
       `;
       entriesEl.appendChild(div);
     });
