@@ -791,7 +791,7 @@
   const entries = [
     {
       type: "After Action Report",
-      title: "AFTER-ACTION REPORT ARM42 — Dugrak Ork Attack on FOB Ember",
+      title: "AFTER-ACTION REPORT ARM42 — Dugruk Ork Attack on FOB Ember",
       date: "2026-08-20",
       meta: "LOG REF: CGN-ARM-0042 · FILED BY: CPT Brenticles · CLEARANCE: Command Eyes Only",
       body: `<div class="document-border">
@@ -800,34 +800,35 @@
   </header>
 
   <section>
-    <h2>Initial SITREP</h2>
-    <p>The Ork counterattack came as a shock but not total suprise. The bulk of 1st Battalion was committed to frontline action beyond immediate response of the FOB. 7th Company: a squad of the Hotshots, the command element, and two squadrons of Calinosian Hazechargers screening the perimeter, under the acting authority of Platoon Commander Ansel Draeth. Against them came Warboss Dugruk and the hard core of his warband &mdash; some survivors of OP Swift Ash, returning for what they'd lost.</p>
+    <h2>Orks Inside the FOB</h2>
+    <p>The Ork counterattack came as a shock but not total suprise. The bulk of 1st Battalion was committed to frontline action beyond immediate response of the FOB. 7th Company: a squad of the Hotshots, the command element, and two squadrons of Calinosian Hazechargers screening the perimeter, under the acting authority of Platoon Commander Ansel Draeth. Against them came Warboss Dugruk and the hard core of his warband &mdash; some survivors of OP Swift Ash, returning for what they'd lost. Orks were found to be already within the perimeter by the time a Hazecharger squadron was able to rush into the action.</p>
   </section>
 
   <section>
-    <h2>Contact</h2>
-    <p>Orks were found to be already within the perimeter by the time a Hazecharger squadron was able to rush into the action. Supported by fire from Hotshots holding the main building, the Hazechargers attempted to route the orks and bravely took the first casualties, against a force that outnumbered them four fold. Before they could even reach the enemy they became combat ineffective and fell back.</p>
+    <h2>Hazechargers Routed</h2>
+    <p>Supported by fire from Hotshots holding the main building, the Hazechargers attempted to secure the main building before  the orks could reach it but imediate heavy casualties. Before they could respond and counter the enemy they suffered heavy losses becoming combat ineffective and fell back.</p>
     <p>With the perimeter broken, LT Draeth made the call every gaurdsmen dreads: withdraw. Consolidate what remained. Live to hold the next line instead of dying on this one.</p>
     <p>The order went out. The Hotshots did not follow it.</p>
   </section>
 
   <section>
     <h2>Kellen's Last Stand</h2>
+	<img src="https://raw.githubusercontent.com/brentzondi/caligno-volunteers-website/main/pics/dug1final.png" alt="VossLastStand" style="width:100%;margin-top:12px;">
     <p>Lt Kellen Voss and his nine Hotshots held position atop the main structure as the withdrawal order came through, and stayed. Whether it was Voss's call alone or the squad's to a man, I cannot say with certainty &mdash; only that they did their duty to the emperor and Calinosian name.</p>
     <p>They gave no ground even as the Ork's climbed atop the FOB's central structure for a direct charge. The Hotshots held that high ground last in the compound. What followed was close, brutal, and without mercy carnage on either side &mdash; hellpistols and combat blades against choppas and sheer weight of numbers, fought at arm's length in the ash and smoke until there was not one member of Voss' squad left.</p>
     <p>Every Hotshot who stayed atop that structure died that day. But they did not die quickly, and they did not die in vain &mdash; Dugruk's warband paid in blood and, more importantly, time. For every minute of that rooftop held, time the withdrawing elements used to disengage and the reinforcements needed to close the distance.</p>
   </section>
 
   <section>
-    <h2>Outcome</h2>
-    <p>FOB Ember fell. It did not fall fast, or easily. I records the outcome as a strategic success purchased at severe cost &mdash; the delay bought by LT Voss and his Hotshots, layered atop the price already paid by the Hazechargers, denied Dugruk the clean victory he came for and gave 1st Battalion the window it needed to respond.</p>
+    <h2>Pyrrhic Victory</h2>
+    <p>FOB Ember fell. It did not fall fast, or easily. I record the outcome as a strategic success purchased at severe cost &mdash; the delay bought by LT Voss and his Hotshots, layered atop the price already paid by the Hazechargers, denied Dugruk the clean victory he came for and gave 1st Battalion the window it needed to respond.</p>
 	<p> I am recommeding LT Voss and the 9 other Hotshots posthumously be awarded the Maltese Medallion for their actions. As well as unit citations for 7th Company, 1st Hotshots and 1st and 2nd Calvary Squadrons. 
 	<p>There is talk over the Vox that Theater command withinessed the battle remotely and seem to think us Calinosians are fighters that bring the hell of our planet in our action. It's being said we call ourselves Hellfighters on our world.</p>
 	<p> Though incorrect, it seems to be catching among the other regiments that is what we are called. I'm choosing to not correct the record. Only that I hope we continue to live up to the name. </p>
   </section>
 
   <section class="commanders-note">
-    <h2>Commander's Note</h2>
+    <h2>Personal Note</h2>
 	<p>There is talk over the Vox that Theater command withinessed the battle remotely and seem to think us Calinosians are fighters that bring the hell of our planet in our action. It's being said we call ourselves Hellfighters on our world.</p>
 	<p> Though incorrect, it seems to be catching among the other regiments that this is what we we call our civil and martial forces. I'm choosing to not correct the record. Only that I hope we continue to live up to the name. </p>
   </section>
@@ -931,6 +932,41 @@
     const latestDate = sortedEntries()[0].date;
     document.getElementById('last-updated-display').innerText = formatDate(latestDate);
   }
+
+  // ---------- comm traffic (Main tab side panel) ----------
+  function parseMeta(meta){
+    const filedByMatch = (meta || '').match(/FILED BY:\s*([^·]+)/);
+    const clearanceMatch = (meta || '').match(/CLEARANCE:\s*([^·]+)/);
+    const refMatch = (meta || '').match(/LOG REF:\s*([^·]+)/);
+    return {
+      filedBy: filedByMatch ? filedByMatch[1].trim() : 'Unattributed',
+      clearance: clearanceMatch ? clearanceMatch[1].trim() : 'Unrestricted',
+      ref: refMatch ? refMatch[1].trim() : '—'
+    };
+  }
+
+  function renderCommTraffic(){
+    const el = document.getElementById('comm-traffic');
+    if (!el) return;
+    const recent = sortedEntries().slice(0, 3);
+    el.innerHTML = recent.map(e => {
+      const { filedBy, clearance, ref } = parseMeta(e.meta);
+      const plainBody = e.vox ? e.body.replace(/<br\s*\/?>/gi, ' ').replace(/\[[^\]]*\]/g, '') : e.body.replace(/<[^>]*>/g, '');
+      const snippet = plainBody.length > 130 ? plainBody.slice(0, 130).trim() + '…' : plainBody.trim();
+      return `
+        <div class="comm-card">
+          <div class="comm-routing">
+            TO: <b>MUNITORUM SECTOR COMMAND</b><br>
+            FROM: <b>${filedBy}</b><br>
+            REF: ${ref} &nbsp;<span class="comm-priority">${clearance}</span>
+          </div>
+          <div class="comm-subject">RE: ${e.title}</div>
+          <div class="comm-snippet">${snippet}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  renderCommTraffic();
 </script>
 </body>
 </html>

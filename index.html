@@ -775,17 +775,32 @@
 </div>
 
 <script>
-  // ---------- tab switching ----------
+  // ---------- tab switching (with hash-based deep linking) ----------
   const tabButtons = document.querySelectorAll('nav.tabs button');
   const panels = document.querySelectorAll('section.panel');
+
+  function activateTab(panelId, updateHash = true){
+    const targetBtn = document.querySelector(`nav.tabs button[data-panel="${panelId}"]`);
+    const targetPanel = document.getElementById(panelId);
+    if (!targetBtn || !targetPanel) return false;
+    tabButtons.forEach(b => b.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    targetBtn.classList.add('active');
+    targetPanel.classList.add('active');
+    if (updateHash) history.replaceState(null, '', '#' + panelId);
+    return true;
+  }
+
   tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabButtons.forEach(b => b.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(btn.dataset.panel).classList.add('active');
-    });
+    btn.addEventListener('click', () => activateTab(btn.dataset.panel));
   });
+
+  // On load: if the URL has a hash matching a tab, open straight to it.
+  // (Entry-specific deep links are handled further below, after entries render.)
+  const initialHash = window.location.hash.replace('#', '');
+  if (initialHash && document.getElementById(initialHash) && document.querySelector(`nav.tabs button[data-panel="${initialHash}"]`)) {
+    activateTab(initialHash, false);
+  }
 
   // ---------- chronicle data ----------
   const entries = [
