@@ -211,6 +211,121 @@
   @media (max-width:520px){.stat-strip{grid-template-columns:repeat(2,1fr);}}
   .lede{font-size:19px;line-height:1.65;color:var(--paper);}
   .lede em{color:var(--amber);font-style:normal;}
+
+  .side-heading{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:12px;
+  }
+
+  .order-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-left:3px solid var(--amber);
+    padding:14px 18px;
+    margin-bottom:12px;
+  }
+  .order-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .order-code{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:1.5px;
+    color:var(--paper-dim);
+  }
+  .order-directive{
+    font-size:15px;
+    line-height:1.55;
+    color:#c7c2ae;
+    margin-bottom:8px;
+  }
+  .order-footer{
+    font-family:var(--font-mono);
+    font-size:10px;
+    color:var(--paper-dim);
+    letter-spacing:0.5px;
+    border-top:1px solid var(--olive-line);
+    padding-top:8px;
+  }
+
+  .campaign-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:24px 26px;
+    margin-bottom:24px;
+  }
+  .campaign-card .dossier-header{margin-bottom:0;}
+  .dossier-header{
+    border-bottom:1px solid var(--border);
+    padding-bottom:14px;
+    margin-bottom:18px;
+  }
+  .operation-title{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:20px;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    color:var(--paper);
+    margin-bottom:8px;
+  }
+  .command-line{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:1px;
+    color:var(--paper-dim);
+    margin-bottom:4px;
+  }
+  .priority-line{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.5px;
+    color:var(--rust-bright);
+    margin-bottom:4px;
+  }
+  .unit-line{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.5px;
+    color:var(--amber);
+  }
+  .dossier-body{padding-top:4px;}
+  .dossier-section{
+    margin-bottom:20px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--olive-line);
+  }
+  .dossier-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .dossier-section h4{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:8px;
+  }
+  .dossier-section p{font-size:15px;line-height:1.65;color:#c7c2ae;margin-bottom:8px;}
+  .dossier-section ul{margin:8px 0 8px 20px;}
+  .dossier-section li{font-size:15px;line-height:1.6;color:#c7c2ae;margin-bottom:6px;}
+  .status-cleared{color:var(--green-active);font-weight:600;}
+  .campaign-status-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:6px;
+  }
+
   .field-card{
     background:var(--panel);
     border:1px solid var(--border);
@@ -606,79 +721,20 @@
 
   <!-- ===================== HOME ===================== -->
   <section class="panel active" id="home">
-    <h2 class="section-title">Operational Status</h2>
-    <p class="section-sub">Compiled for command review. Reproduction restricted to authorized Munitorum personnel.</p>
+    <h2 class="section-title">Standing Orders &amp; Active Campaigns</h2>
+    <p class="section-sub">Current regimental commitments and command directives, updated as operations develop.</p>
 
     <div class="dossier-grid">
       <div>
-<div class="dossier-grid">
-    <div>
-      <header class="dossier-header">
-        <h3 class="operation-title">OPERATION: "SWIFT ASH"</h3>
-        <p class="command-line">ASTRA MILITARUM TACTICAL COMMAND — ARMAGEDDON THEATER COMMAND</p>
-        <p class="priority-line"><strong>PRIORITY:</strong> IMMEDIATE — RAPID RESPONSE TASKING</p>
-        <p class="unit-line"><strong>UNIT:</strong> 4TH CALINOSIAN REGIMENT</p>
-      </header>
+        <h3 class="side-heading">Standing Orders</h3>
+        <div id="standing-orders-list"></div>
 
-      <div class="dossier-body">
-        <section class="dossier-section">
-          <h4>I. THEATER</h4>
-          <p>Volcanus Theater, southern approach to Hive Deathmire.</p>
-        </section>
-
-        <section class="dossier-section">
-          <h4>II. SITUATION</h4>
-          <p>A forward operating position, designated FOB EMBER, was established by elements of the Blood Angels Chapter during the opening movements of the current offensive. FOB EMBER has since been isolated by xenos elements advancing from the Deathmire approaches. Vox contact, though intermittent, confirms the position is still held.</p>
-          <p><strong>Confirmed survivors:</strong> A Blood Angels Champion, sole remaining member of his strike element, is holding FOB EMBER alone.</p>
-        </section>
-
-        <section class="dossier-section">
-          <h4>III. MISSION</h4>
-          <p>The 4th Calinosian Regiment is tasked with:</p>
-          <ul>
-            <li>Rapid insertion to FOB EMBER via fastest viable approach, hostile presence notwithstanding.</li>
-            <li>Relieve Blood Angels units — this office anticipates hostile elements in close proximity to or inside the FOB perimeter.</li>
-            <li>Extraction of the Champion, alive if breathing, recovered if not. Astartes gene-seed recovery protocol applies without exception — this office reminds all personnel that recovery of a fallen Astartes takes priority over regimental casualties short of total mission failure.</li>
-            <li>Hold FOB EMBER for the minimum duration required to complete extraction, or as ordered by command.</li>
-          </ul>
-        </section>
-
-        <section class="dossier-section">
-          <h4>IV. ASSESSMENT</h4>
-          <p>This office notes, without further comment, that this tasking constitutes the Calinosians' first combat activation. It is also, by coincidence or design, precisely the mission this regiment was built for, with no other forces close enough to reach the FOB in time.</p>
-          <p>The Blood Angels do not ask for rescue. This office trusts that will not stop the 4th from giving it.</p>
-        </section>
-
-        <section class="dossier-section">
-          <h4>V. AUTHORIZATION</h4>
-          <p class="status-cleared">Cleared for immediate execution.</p>
-        </section>
-      </div>
-    </div>
-  </div>
-
-        <div class="stat-strip">
-          <div><div class="num">312</div><div class="lbl">Personnel Strength</div></div>
-          <div><div class="num">6</div><div class="lbl">Units Under Record</div></div>
-          <div><div class="num">1</div><div class="lbl">Active Theater</div></div>
-          <div><div class="num">7</div><div class="lbl">Engagements Fought</div></div>
-          <div><div class="num">3</div><div class="lbl">Battle Honors</div></div>
-          <div><div class="num">14</div><div class="lbl">Confirmed KIA</div></div>
-        </div>
-
-        <div class="field-card">
-          <p>Maintained per standing Munitorum order for continuous field documentation:
-          engagement logs as they are filed, the regiment's founding record and doctrine
-          history, and current disposition of every unit under this banner. This file is
-          updated by the Chronicler-Serf after every engagement, campaign turn, and
-          maintenance cycle, as command requires.</p>
-        </div>
+        <h3 class="side-heading" style="margin-top:36px;">Active Campaigns</h3>
+        <div id="campaigns-list"></div>
       </div>
 
       <div>
-        <h3 style="font-family:var(--font-mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:12px;">
-          Vox Traffic — Munitorum &amp; Command
-        </h3>
+        <h3 class="side-heading">Vox Traffic — Munitorum &amp; Command</h3>
         <div id="comm-traffic"></div>
       </div>
     </div>
@@ -1052,6 +1108,178 @@
     }).join('');
   }
   renderCommTraffic();
+
+  // ---------- standing orders ----------
+  // status: "active" | "rescinded"
+  const standingOrders = [
+    {
+      code: "SO-014",
+      directive: "Maintain fog-doctrine advance posture across all forward elements at Kasr-19.",
+      issuedBy: "Sector Command",
+      date: "2026-08-22",
+      status: "active"
+    },
+    {
+      code: "SO-011",
+      directive: "All regimental correspondence to be filed per reissued Directive 7/Ash record-keeping standard.",
+      issuedBy: "Administratum",
+      date: "2026-08-18",
+      status: "active"
+    }
+  ];
+
+  function renderStandingOrders(){
+    const el = document.getElementById('standing-orders-list');
+    if (!el) return;
+    const sorted = [...standingOrders].sort((a, b) => new Date(b.date) - new Date(a.date));
+    el.innerHTML = sorted.map(o => `
+      <div class="order-card">
+        <div class="order-top">
+          <span class="order-code">${o.code}</span>
+          <span class="stamp ${o.status === 'active' ? 'active' : 'kia'}">${o.status}</span>
+        </div>
+        <div class="order-directive">${o.directive}</div>
+        <div class="order-footer">ISSUED BY: ${o.issuedBy} &nbsp;·&nbsp; ${formatDate(o.date)}</div>
+      </div>
+    `).join('');
+  }
+  renderStandingOrders();
+
+  // ---------- active campaigns ----------
+  // status: "active" | "planning" | "concluded"
+  // Add new campaigns here in the same shape as they're ordered.
+  const campaigns = [
+    {
+      status: "active",
+      title: 'OPERATION: "SWIFT ASH"',
+      commandLine: "ASTRA MILITARUM TACTICAL COMMAND — ARMAGEDDON THEATER COMMAND",
+      priorityLine: "IMMEDIATE — RAPID RESPONSE TASKING",
+      unitLine: "4TH CALINOSIAN REGIMENT",
+      sections: [
+        { label: "I. THEATER", html: "<p>Volcanus Theater, southern approach to Hive Deathmire.</p>" },
+        { label: "II. SITUATION", html: "<p>A forward operating position, designated FOB EMBER, was established by elements of the Blood Angels Chapter during the opening movements of the current offensive. FOB EMBER has since been isolated by xenos elements advancing from the Deathmire approaches. Vox contact, though intermittent, confirms the position is still held.</p><p><strong>Confirmed survivors:</strong> A Blood Angels Champion, sole remaining member of his strike element, is holding FOB EMBER alone.</p>" },
+        { label: "III. MISSION", html: "<p>The 4th Calinosian Regiment is tasked with:</p><ul><li>Rapid insertion to FOB EMBER via fastest viable approach, hostile presence notwithstanding.</li><li>Relieve Blood Angels units — this office anticipates hostile elements in close proximity to or inside the FOB perimeter.</li><li>Extraction of the Champion, alive if breathing, recovered if not. Astartes gene-seed recovery protocol applies without exception — this office reminds all personnel that recovery of a fallen Astartes takes priority over regimental casualties short of total mission failure.</li><li>Hold FOB EMBER for the minimum duration required to complete extraction, or as ordered by command.</li></ul>" },
+        { label: "IV. ASSESSMENT", html: "<p>This office notes, without further comment, that this tasking constitutes the Calinosians' first combat activation. It is also, by coincidence or design, precisely the mission this regiment was built for, with no other forces close enough to reach the FOB in time.</p><p>The Blood Angels do not ask for rescue. This office trusts that will not stop the 4th from giving it.</p>" },
+        { label: "V. AUTHORIZATION", html: "<p class=\"status-cleared\">Cleared for immediate execution.</p>" }
+      ]
+    }
+    // {
+    //   status: "planning",
+    //   title: 'OPERATION: "..."',
+    //   commandLine: "...",
+    //   priorityLine: "...",
+    //   unitLine: "...",
+    //   sections: [ { label: "I. THEATER", html: "<p>...</p>" }, ... ]
+    // },
+  ];
+
+  function renderCampaigns(){
+    const el = document.getElementById('campaigns-list');
+    if (!el) return;
+    const statusClass = { active: 'active', planning: 'deployed', concluded: 'refit' };
+    el.innerHTML = campaigns.map(c => `
+      <div class="campaign-card">
+        <div class="campaign-status-row">
+          <span class="stamp ${statusClass[c.status] || 'refit'}">${c.status}</span>
+        </div>
+        <header class="dossier-header">
+          <h3 class="operation-title">${c.title}</h3>
+          <p class="command-line">${c.commandLine}</p>
+          <p class="priority-line"><strong>PRIORITY:</strong> ${c.priorityLine}</p>
+          <p class="unit-line"><strong>UNIT:</strong> ${c.unitLine}</p>
+        </header>
+        <div class="dossier-body">
+          ${c.sections.map(s => `
+            <section class="dossier-section">
+              <h4>${s.label}</h4>
+              ${s.html}
+            </section>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+  renderCampaigns();
+
+  // ---------- dispatches: Calinos / sector / Imperium-wide news ----------
+  // scope: "Calinos" | "Sector" | "Imperium"
+  // impact: optional — a short note on how this bears on the regiment
+  const dispatches = [
+    {
+      scope: "Calinos",
+      title: "Munitorum planetary levy extended for a second regimental cycle",
+      date: "2026-08-20",
+      body: "The Departmento Munitorum has renewed its levy order on Calinos, authorizing continued regimental musters beyond the original single-cycle grant. Local tithe officials report the world's manufactory output remains sufficient to equip newly raised formations.",
+      impact: "Opens the door for further regiments (5th–7th) to eventually be raised alongside the 4th."
+    },
+    {
+      scope: "Calinos",
+      title: "Ashfall district reports record manufactory output",
+      date: "2026-08-15",
+      body: "Forge-overseers in the Ashfall manufactory district report the highest quarterly lasgun and flak-plate output since planetary tithe records began. Officials credit the surge to round-the-clock shifts following the renewed Munitorum levy.",
+      impact: "Improved equipment availability for the 4th Regiment's ongoing muster."
+    },
+    {
+      scope: "Sector",
+      title: "Increased hostile activity reported along the Kasr approach corridors",
+      date: "2026-08-25",
+      body: "Sector command has issued a heightened-alert bulletin for all formations operating near the Kasr approach corridors, citing a marked increase in enemy incursions over the preceding weeks.",
+      impact: "Basis for the 4th Regiment's current deployment to the Kasr-19 sector."
+    },
+    {
+      scope: "Sector",
+      title: "Armageddon Theater Command requests rapid-response tasking",
+      date: "2026-08-21",
+      body: "Armageddon Theater Command has circulated an urgent request for any formation capable of rapid insertion near Hive Deathmire, citing an isolated forward position in need of relief.",
+      impact: "Directly precedes the tasking order for Operation Swift Ash."
+    },
+    {
+      scope: "Imperium",
+      title: "Standard Munitorum record-keeping directive reissued (7/Ash)",
+      date: "2026-08-18",
+      body: "The Administratum has reissued Directive 7/Ash governing standard field-record transcription for line regiments, formalizing requirements for battle reports, casualty rolls, and correspondence handling across the Imperium.",
+      impact: "This archive is maintained in compliance with the reissued directive."
+    },
+    {
+      scope: "Imperium",
+      title: "Astropathic relay congestion reported across multiple sectors",
+      date: "2026-08-12",
+      body: "Widespread astropathic relay congestion has been reported across several adjoining sectors, attributed to elevated warp turbulence. The Administratum advises regimental chroniclers to expect delays in dispatch transcription and cross-sector correspondence.",
+      impact: "May account for any gaps in this archive's dispatch record during the affected period."
+    }
+  ];
+
+  function renderDispatches(filter){
+    const el = document.getElementById('dispatches-list');
+    if (!el) return;
+    el.innerHTML = '';
+    const sorted = [...dispatches].sort((a, b) => new Date(b.date) - new Date(a.date));
+    sorted.filter(d => filter === 'all' || d.scope === filter).forEach(d => {
+      const scopeClass = d.scope === 'Calinos' ? 'local' : d.scope === 'Sector' ? 'sector' : 'imperium';
+      const scopeLabel = d.scope === 'Calinos' ? 'Calinos' : d.scope === 'Sector' ? 'Sector' : 'Imperium-Wide';
+      const div = document.createElement('div');
+      div.className = 'dispatch-card';
+      div.innerHTML = `
+        <div class="dispatch-top">
+          <span class="scope-tag ${scopeClass}">${scopeLabel}</span>
+          <span class="dispatch-date">${formatDate(d.date)}</span>
+        </div>
+        <div class="dispatch-title">${d.title}</div>
+        <div class="dispatch-body">${d.body}</div>
+        ${d.impact ? `<div class="dispatch-impact"><b>BEARING ON THE REGIMENT:</b> ${d.impact}</div>` : ''}
+      `;
+      el.appendChild(div);
+    });
+  }
+  renderDispatches('all');
+
+  document.querySelectorAll('#dispatches .entry-filters button[data-scope-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#dispatches .entry-filters button[data-scope-filter]').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      renderDispatches(btn.dataset.scopeFilter);
+    });
+  });
 </script>
 </body>
 </html>
