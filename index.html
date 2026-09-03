@@ -592,7 +592,6 @@
       <div>File status<span>OPEN — ACTIVE RECORD</span></div>
       <div>Current theaters<span>Armageddon</span></div>
       <div>Last log entry<span id="last-updated-display">—</span></div>
-      <div>Filed by<span>Regimental Chronicler-Serf</span></div>
     </div>
   </header>
 
@@ -612,9 +611,52 @@
 
     <div class="dossier-grid">
       <div>
-        <p class="lede">
-          Current Orders - (WIP)
-        </p>
+<div class="dossier-grid">
+    <div>
+      <header class="dossier-header">
+        <h3 class="operation-title">OPERATION: "SWIFT ASH"</h3>
+        <p class="command-line">ASTRA MILITARUM TACTICAL COMMAND — ARMAGEDDON THEATER COMMAND</p>
+        <p class="priority-line"><strong>PRIORITY:</strong> IMMEDIATE — RAPID RESPONSE TASKING</p>
+        <p class="unit-line"><strong>UNIT:</strong> 4TH CALINOSIAN REGIMENT</p>
+      </header>
+
+      <div class="dossier-body">
+        <section class="dossier-section">
+          <h4>I. THEATER</h4>
+          <p>Volcanus Theater, southern approach to Hive Deathmire.</p>
+        </section>
+
+        <section class="dossier-section">
+          <h4>II. SITUATION</h4>
+          <p>A forward operating position, designated FOB EMBER, was established by elements of the Blood Angels Chapter during the opening movements of the current offensive. FOB EMBER has since been isolated by xenos elements advancing from the Deathmire approaches. Vox contact, though intermittent, confirms the position is still held.</p>
+          <p><strong>Confirmed survivors:</strong> A Blood Angels Champion, sole remaining member of his strike element, is holding FOB EMBER alone.</p>
+        </section>
+
+        <section class="dossier-section">
+          <h4>III. MISSION</h4>
+          <p>The 4th Calinosian Regiment is tasked with:</p>
+          <ul>
+            <li>Rapid insertion to FOB EMBER via fastest viable approach, hostile presence notwithstanding.</li>
+            <li>Relieve Blood Angels units — this office anticipates hostile elements in close proximity to or inside the FOB perimeter.</li>
+            <li>Extraction of the Champion, alive if breathing, recovered if not. Astartes gene-seed recovery protocol applies without exception — this office reminds all personnel that recovery of a fallen Astartes takes priority over regimental casualties short of total mission failure.</li>
+            <li>Hold FOB EMBER for the minimum duration required to complete extraction, or as ordered by command.</li>
+          </ul>
+        </section>
+
+        <section class="dossier-section">
+          <h4>IV. ASSESSMENT</h4>
+          <p>This office notes, without further comment, that this tasking constitutes the Calinosians' first combat activation. It is also, by coincidence or design, precisely the mission this regiment was built for, with no other forces close enough to reach the FOB in time.</p>
+          <p>The Blood Angels do not ask for rescue. This office trusts that will not stop the 4th from giving it.</p>
+        </section>
+
+        <section class="dossier-section">
+          <h4>V. AUTHORIZATION</h4>
+          <p class="status-cleared">Cleared for immediate execution.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
 
         <div class="stat-strip">
           <div><div class="num">312</div><div class="lbl">Personnel Strength</div></div>
@@ -636,7 +678,7 @@
 
       <div>
         <h3 style="font-family:var(--font-mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:12px;">
-          Comm Traffic — Munitorum &amp; Command
+          Vox Traffic — Munitorum &amp; Command
         </h3>
         <div id="comm-traffic"></div>
       </div>
@@ -837,15 +879,14 @@
   <section>
     <h2>Pyrrhic Victory</h2>
     <p>FOB Ember fell. It did not fall fast, or easily. I record the outcome as a strategic success purchased at severe cost &mdash; the delay bought by LT Voss and his Hotshots, layered atop the price already paid by the Hazechargers, denied Dugruk the clean victory he came for and gave 1st Battalion the window it needed to respond.</p>
-	<p> I am recommeding LT Voss and the 9 other Hotshots posthumously be awarded the Maltese Medallion for their actions. As well as unit citations for 7th Company, 1st Hotshots and 1st and 2nd Calvary Squadrons. 
-	<p>There is talk over the Vox that Theater command withinessed the battle remotely and seem to think us Calinosians are fighters that bring the hell of our planet in our action. It's being said we call ourselves Hellfighters on our world.</p>
-	<p> Though incorrect, it seems to be catching among the other regiments that is what we are called. I'm choosing to not correct the record. Only that I hope we continue to live up to the name. </p>
+	<p> I am recommeding LT Voss and the other Hotshots posthumously be awarded the Maltese Medallion for their actions. As well as unit citations for 7th Company, 1st Hotshots and 1st and 2nd Calvary Squadrons. 
+
   </section>
 
   <section class="commanders-note">
     <h2>Personal Note</h2>
-	<p>There is talk over the Vox that Theater command withinessed the battle remotely and seem to think us Calinosians are fighters that bring the hell of our planet in our action. It's being said we call ourselves Hellfighters on our world.</p>
-	<p> Though incorrect, it seems to be catching among the other regiments that this is what we we call our civil and martial forces. I'm choosing to not correct the record. Only that I hope we continue to live up to the name. </p>
+	<p>There is talk over the Vox that Theater command witnessed the battle remotely and seem to think us Calinosians are fighters that bring the hell of our planet with us. Some have called us Hellfighters.</p>
+	<p> Though incorrect, it seems to be catching among the other regiments. I'm choosing to not correct the record. Only that I hope we continue to live up to the name. </p>
   </section>
 
   <footer>
@@ -855,7 +896,7 @@
     },
     {
       type: "Vox Traffic",
-      title: "FOB EMBER TO 407th, 1ST BATTALION COMMAND",
+      title: "FOB EMBER TO 407TH COMMAND",
       date: "2026-08-19",
       body: "[LT Vorne] Vorne to Command, contact report. Visual on hostile Ork force approaching. Platoon sized element with light support. Requesting instructions.<br>[CPT Brenticles] Vorne, this is Captain Brenticles. Hold FOB Ember through all hell. Reinforcements will be enroute direct.<br>[LT Vorne] We'll show them the meaning.",
       vox: true
@@ -877,11 +918,41 @@
       journal: true
     },
     {
-      type: "Casualty Roll",
-      title: "Kasr-19 engagement — losses recorded",
-      date: "2026-08-16",
-      meta: "LOG REF: CGN-CR-0104 · FILED BY: Regimental Chronicler-Serf · CLEARANCE: Command",
-      body: "Losses sustained during the extraction are recorded here as they are confirmed and cross-referenced against Munitorum manifest. This entry is a placeholder — replace with verified roll details after each engagement.",
+      type: "After Action Report",
+      title: "AFTER-ACTION REPORT ARM41 — OP SWIFT ASH: RELIEF OF FOB EMBER",
+      date: "2026-08-01",
+      meta: "LOG REF: CGN-ARM-0041 · FILED BY: CPT Brenticles · CLEARANCE: Command Eyes Only",
+      body: `<div class="document-border">
+  <header>
+    <h2 class="report-title">Mission Objective</h2>
+    <p class="mission-statement">Rapid insertion and extraction of Blood Angels Captain from FOB Ember, Volcanus Theater near Hive Deathmire.</p>
+  </header>
+
+  <section class="report-section">
+    <h3 class="section-title">Engagement Summary</h3>
+    
+    <p>Company 7 inserted at best speed through ash-fall and hostile fire. The Captain was found heavily pressed, Ork forces had closed on the FOB perimeter and were moving to overwhelm the position. I assessed the break-in point and committed the Hotshot squad for immediate rapid insertion.</p>
+    
+    <p>The Hotshots dove straight into the FOB interior and made hard contact with the Captain. They locked into the scrum with him as Orks pressed in from all sides — the three who fell did so holding the line beside him, their lasguns bright in the ash-choked air, buying time with their bodies for the larger plan to turn.</p>
+    <img src="https://github.com/brentzondi/caligno-volunteers-website/blob/main/pics/Gemini_Generated_Image_b1.jpg?raw=true" alt="bat1" style="width:100%;margin-top:12px;"
+    <p>While Hotshots and the Blood Angel held the center, Calinosian troopers took the flank position on the tower works and established plunging fire from above, pouring concentrated fire down into the Ork mass. The two Hippogriffs concentrated their fire on the FOB perimeter itself — the Rogal Dorn's heavy rounds tore through the encirclement while the Centaur APC laid covering fire across the kill zone.</p>
+	<img src="https://github.com/brentzondi/caligno-volunteers-website/blob/main/pics/Gemini_Generated_Image_b2.jpg?raw=true" alt="bat1" style="width:100%;margin-top:12px;"
+    <p>The Orks, hammered from above and from the flanks, their assault broken by the weight of coordinated fire, fell back. The perimeter held.</p>
+  </section>
+
+  <section class="report-section">
+    <h3 class="section-title">Outcome</h3>
+    <p>The Blood Angel was retrieved alive. <strong>Condition:</strong> severely wounded but ambulatory. The momentum of the breakthrough was immediately leveraged into a coordinated counterattack against Ork heavy elements that had massed for the encirclement. Results of that secondary phase are pending full assessment, but initial reports indicate significant enemy losses.</p>
+  </section>
+
+  <section class="report-section commander-note">
+    <h3 class="section-title">Commander's Note</h3>
+    <p>This was the 4th's first combat action since activation. Company 7 conducted a textbook rescue-under-fire insertion, with Hotshots hitting the center of the storm while supporting elements pinned and broke the enemy assault. The three hotshots who fell did so holding the line beside an Astartes, their names entered into the rolls.</p>
+    <p>The Blood Angels Captain survived in critical condition. He will live to fight again.</p>
+  </section>
+  <footer>
+  </footer>
+</div>`,
       journal: false
     }
   ];
