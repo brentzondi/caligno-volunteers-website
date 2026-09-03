@@ -932,6 +932,41 @@
     const latestDate = sortedEntries()[0].date;
     document.getElementById('last-updated-display').innerText = formatDate(latestDate);
   }
+
+  // ---------- comm traffic (Main tab side panel) ----------
+  function parseMeta(meta){
+    const filedByMatch = (meta || '').match(/FILED BY:\s*([^·]+)/);
+    const clearanceMatch = (meta || '').match(/CLEARANCE:\s*([^·]+)/);
+    const refMatch = (meta || '').match(/LOG REF:\s*([^·]+)/);
+    return {
+      filedBy: filedByMatch ? filedByMatch[1].trim() : 'Unattributed',
+      clearance: clearanceMatch ? clearanceMatch[1].trim() : 'Unrestricted',
+      ref: refMatch ? refMatch[1].trim() : '—'
+    };
+  }
+
+  function renderCommTraffic(){
+    const el = document.getElementById('comm-traffic');
+    if (!el) return;
+    const recent = sortedEntries().slice(0, 3);
+    el.innerHTML = recent.map(e => {
+      const { filedBy, clearance, ref } = parseMeta(e.meta);
+      const plainBody = e.vox ? e.body.replace(/<br\s*\/?>/gi, ' ').replace(/\[[^\]]*\]/g, '') : e.body.replace(/<[^>]*>/g, '');
+      const snippet = plainBody.length > 130 ? plainBody.slice(0, 130).trim() + '…' : plainBody.trim();
+      return `
+        <div class="comm-card">
+          <div class="comm-routing">
+            TO: <b>MUNITORUM SECTOR COMMAND</b><br>
+            FROM: <b>${filedBy}</b><br>
+            REF: ${ref} &nbsp;<span class="comm-priority">${clearance}</span>
+          </div>
+          <div class="comm-subject">RE: ${e.title}</div>
+          <div class="comm-snippet">${snippet}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  renderCommTraffic();
 </script>
 </body>
 </html>
