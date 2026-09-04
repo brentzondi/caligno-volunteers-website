@@ -900,8 +900,117 @@
   }
 
   // ---------- chronicle data ----------
-  // ---------- chronicle data (loaded from data/entries.json) ----------
-  let entries = [];
+  const entries = [
+    {
+      type: "After Action Report",
+      title: "AFTER-ACTION REPORT ARM42 — Dugruk Ork Attack on FOB Ember",
+      date: "2026-08-20",
+      meta: "LOG REF: CGN-ARM-0042 · FILED BY: CPT Brenticles · CLEARANCE: Command Eyes Only",
+      body: `<div class="document-border">
+  <header>
+    <h1>After-Action Report: FOB Ember</h1>
+  </header>
+
+  <section>
+    <h2>Orks Inside the FOB</h2>
+    <p>The Ork counterattack came as a shock but not total suprise. The bulk of 1st Battalion was committed to frontline action beyond immediate response of the FOB. 7th Company: a squad of the Hotshots, the command element, and two squadrons of Calinosian Hazechargers screening the perimeter, under the acting authority of Platoon Commander Ansel Draeth. Against them came Warboss Dugruk and the hard core of his warband &mdash; some survivors of OP Swift Ash, returning for what they'd lost. Orks were found to be already within the perimeter by the time a Hazecharger squadron was able to rush into the action.</p>
+  </section>
+
+  <section>
+    <h2>Hazechargers Routed</h2>
+    <p>Supported by fire from Hotshots holding the main building, the Hazechargers attempted to secure the main building before  the orks could reach it but imediate heavy casualties. Before they could respond and counter the enemy they suffered heavy losses becoming combat ineffective and fell back.</p>
+    <p>With the perimeter broken, LT Draeth made the call every gaurdsmen dreads: withdraw. Consolidate what remained. Live to hold the next line instead of dying on this one.</p>
+    <p>The order went out. The Hotshots did not follow it.</p>
+  </section>
+
+  <section>
+    <h2>Kellen's Last Stand</h2>
+	<img src="https://raw.githubusercontent.com/brentzondi/caligno-volunteers-website/main/pics/dug1final.png" alt="VossLastStand" style="width:100%;margin-top:12px;">
+    <p>Lt Kellen Voss and his nine Hotshots held position atop the main structure as the withdrawal order came through, and stayed. Whether it was Voss's call alone or the squad's to a man, I cannot say with certainty &mdash; only that they did their duty to the emperor and Calinosian name.</p>
+    <p>They gave no ground even as the Ork's climbed atop the FOB's central structure for a direct charge. The Hotshots held that high ground last in the compound. What followed was close, brutal, and without mercy carnage on either side &mdash; hellpistols and combat blades against choppas and sheer weight of numbers, fought at arm's length in the ash and smoke until there was not one member of Voss' squad left.</p>
+    <p>Every Hotshot who stayed atop that structure died that day. But they did not die quickly, and they did not die in vain &mdash; Dugruk's warband paid in blood and, more importantly, time. For every minute of that rooftop held, time the withdrawing elements used to disengage and the reinforcements needed to close the distance.</p>
+  </section>
+
+  <section>
+    <h2>Pyrrhic Victory</h2>
+    <p>FOB Ember fell. It did not fall fast, or easily. I record the outcome as a strategic success purchased at severe cost &mdash; the delay bought by LT Voss and his Hotshots, layered atop the price already paid by the Hazechargers, denied Dugruk the clean victory he came for and gave 1st Battalion the window it needed to respond.</p>
+	<p> I am recommeding LT Voss and the other Hotshots posthumously be awarded the Maltese Medallion for their actions. As well as unit citations for 7th Company, 1st Hotshots and 1st and 2nd Calvary Squadrons. 
+
+  </section>
+
+  <section class="commanders-note">
+    <h2>Personal Note</h2>
+	<p>There is talk over the Vox that Theater command witnessed the battle remotely and seem to think us Calinosians are fighters that bring the hell of our planet with us. Some have called us Hellfighters.</p>
+	<p> Though incorrect, it seems to be catching among the other regiments. I'm choosing to not correct the record. Only that I hope we continue to live up to the name. </p>
+  </section>
+
+  <footer>
+  </footer>
+</div>`,
+      journal: false
+    },
+    {
+      type: "Vox Traffic",
+      title: "FOB EMBER TO 407TH COMMAND",
+      date: "2026-08-19",
+      body: "[LT Vorne] Vorne to Command, contact report. Visual on hostile Ork force approaching. Platoon sized element with light support. Requesting instructions.<br>[CPT Brenticles] Vorne, this is Captain Brenticles. Hold FOB Ember through all hell. Reinforcements will be enroute direct.<br>[LT Vorne] We'll show them the meaning.",
+      vox: true
+    },
+    {
+      type: "Soldier's Journal",
+      title: "Entry — Third night in the ash fields",
+      date: "2026-08-18",
+      meta: "LOG REF: CGN-SJ-0091 · FILED BY: Unattributed, recovered from field kit · CLEARANCE: Chaplaincy Review",
+      body: "The fog doesn't lift out here. We've stopped waiting for it to. Command says that's the point — we're the ones who see through it, or near enough. I believe them most days.",
+      journal: true
+    },
+    {
+      type: "Last Letter Home",
+      title: "To the family of a Shock Trooper, 2nd Line",
+      date: "2026-08-17",
+      meta: "LOG REF: CGN-LL-0091 · FILED BY: Regimental Chaplaincy, with Casualty Roll CGN-CR-0104 · CLEARANCE: Next of Kin",
+      body: "Tell them I made it further than I thought I would, and that the company held the line because of people like the ones standing next to me — not because of anything I did alone.",
+      journal: true
+    },
+    {
+      type: "After Action Report",
+      title: "AFTER-ACTION REPORT ARM41 — OP SWIFT ASH: RELIEF OF FOB EMBER",
+      date: "2026-08-01",
+      meta: "LOG REF: CGN-ARM-0041 · FILED BY: CPT Brenticles · CLEARANCE: Command Eyes Only",
+      body: `<div class="document-border">
+  <header>
+    <h2 class="report-title">Mission Objective</h2>
+    <p class="mission-statement">Rapid insertion and extraction of Blood Angels Captain from FOB Ember, Volcanus Theater near Hive Deathmire.</p>
+  </header>
+
+  <section class="report-section">
+    <h3 class="section-title">Engagement Summary</h3>
+    
+    <p>Company 7 inserted at best speed through ash-fall and hostile fire. The Captain was found heavily pressed, Ork forces had closed on the FOB perimeter and were moving to overwhelm the position. I assessed the break-in point and committed the Hotshot squad for immediate rapid insertion.</p>
+    
+    <p>The Hotshots dove straight into the FOB interior and made hard contact with the Captain. They locked into the scrum with him as Orks pressed in from all sides — the three who fell did so holding the line beside him, their lasguns bright in the ash-choked air, buying time with their bodies for the larger plan to turn.</p>
+    <img src="https://raw.githubusercontent.com/brentzondi/caligno-volunteers-website/main/pics/Gemini_Generated_Image_b1.jpg" alt="bat1" style="width:75%;margin-top:12px;">
+    <p>While Hotshots and the Blood Angel held the center, Calinosian troopers took the flank position on the tower works and established plunging fire from above, pouring concentrated fire down into the Ork mass. The two Hippogriffs concentrated their fire on the FOB perimeter itself — the Rogal Dorn's heavy rounds tore through the encirclement while the Centaur APC laid covering fire across the kill zone.</p>
+	<img src="https://raw.githubusercontent.com/brentzondi/caligno-volunteers-website/main/pics/Gemini_Generated_Image_b2.jpg" alt="bat2" style="width:75%;margin-top:12px;">
+    <p>The Orks, hammered from above and from the flanks, their assault broken by the weight of coordinated fire, fell back. The perimeter held.</p>
+  </section>
+
+  <section class="report-section">
+    <h3 class="section-title">Outcome</h3>
+    <p>The Blood Angel was retrieved alive. <strong>Condition:</strong> severely wounded but ambulatory. The momentum of the breakthrough was immediately leveraged into a coordinated counterattack against Ork heavy elements that had massed for the encirclement. Results of that secondary phase are pending full assessment, but initial reports indicate significant enemy losses.</p>
+  </section>
+
+  <section class="report-section commander-note">
+    <h3 class="section-title">Commander's Note</h3>
+    <p>This was the 4th's first combat action since activation. Company 7 conducted a textbook rescue-under-fire insertion, with Hotshots hitting the center of the storm while supporting elements pinned and broke the enemy assault. The three hotshots who fell did so holding the line beside an Astartes, their names entered into the rolls.</p>
+    <p>The Blood Angels Captain survived in critical condition. He will live to fight again.</p>
+  </section>
+  <footer>
+  </footer>
+</div>`,
+      journal: false
+    }
+  ];
 
   const entriesEl = document.getElementById('entries');
   
@@ -946,6 +1055,8 @@
     });
   }
 
+  // Initial render
+  renderEntries('all');
 
   // Filter button handlers
   const filterBtns = document.querySelectorAll('.entry-filters button[data-filter]');
@@ -957,6 +1068,11 @@
     });
   });
 
+  // Display latest log date in header
+  if(entries.length > 0) {
+    const latestDate = sortedEntries()[0].date;
+    document.getElementById('last-updated-display').innerText = formatDate(latestDate);
+  }
 
   // ---------- comm traffic (Main tab side panel) ----------
   function parseMeta(meta){
@@ -991,12 +1107,26 @@
       `;
     }).join('');
   }
+  renderCommTraffic();
 
   // ---------- standing orders ----------
   // status: "active" | "rescinded"
-  // ---------- standing orders (loaded from data/standing-orders.json) ----------
-  // status: "active" | "rescinded"
-  let standingOrders = [];
+  const standingOrders = [
+    {
+      code: "SO-014",
+      directive: "Maintain fog-doctrine advance posture across all forward elements at Kasr-19.",
+      issuedBy: "Sector Command",
+      date: "2026-08-22",
+      status: "active"
+    },
+    {
+      code: "SO-011",
+      directive: "All regimental correspondence to be filed per reissued Directive 7/Ash record-keeping standard.",
+      issuedBy: "Administratum",
+      date: "2026-08-18",
+      status: "active"
+    }
+  ];
 
   function renderStandingOrders(){
     const el = document.getElementById('standing-orders-list');
@@ -1013,13 +1143,35 @@
       </div>
     `).join('');
   }
+  renderStandingOrders();
 
   // ---------- active campaigns ----------
   // status: "active" | "planning" | "concluded"
   // Add new campaigns here in the same shape as they're ordered.
-  // ---------- active campaigns (loaded from data/campaigns.json) ----------
-  // status: "active" | "planning" | "concluded"
-  let campaigns = [];
+  const campaigns = [
+    {
+      status: "active",
+      title: 'OPERATION: "SWIFT ASH"',
+      commandLine: "ASTRA MILITARUM TACTICAL COMMAND — ARMAGEDDON THEATER COMMAND",
+      priorityLine: "IMMEDIATE — RAPID RESPONSE TASKING",
+      unitLine: "4TH CALINOSIAN REGIMENT",
+      sections: [
+        { label: "I. THEATER", html: "<p>Volcanus Theater, southern approach to Hive Deathmire.</p>" },
+        { label: "II. SITUATION", html: "<p>A forward operating position, designated FOB EMBER, was established by elements of the Blood Angels Chapter during the opening movements of the current offensive. FOB EMBER has since been isolated by xenos elements advancing from the Deathmire approaches. Vox contact, though intermittent, confirms the position is still held.</p><p><strong>Confirmed survivors:</strong> A Blood Angels Champion, sole remaining member of his strike element, is holding FOB EMBER alone.</p>" },
+        { label: "III. MISSION", html: "<p>The 4th Calinosian Regiment is tasked with:</p><ul><li>Rapid insertion to FOB EMBER via fastest viable approach, hostile presence notwithstanding.</li><li>Relieve Blood Angels units — this office anticipates hostile elements in close proximity to or inside the FOB perimeter.</li><li>Extraction of the Champion, alive if breathing, recovered if not. Astartes gene-seed recovery protocol applies without exception — this office reminds all personnel that recovery of a fallen Astartes takes priority over regimental casualties short of total mission failure.</li><li>Hold FOB EMBER for the minimum duration required to complete extraction, or as ordered by command.</li></ul>" },
+        { label: "IV. ASSESSMENT", html: "<p>This office notes, without further comment, that this tasking constitutes the Calinosians' first combat activation. It is also, by coincidence or design, precisely the mission this regiment was built for, with no other forces close enough to reach the FOB in time.</p><p>The Blood Angels do not ask for rescue. This office trusts that will not stop the 4th from giving it.</p>" },
+        { label: "V. AUTHORIZATION", html: "<p class=\"status-cleared\">Cleared for immediate execution.</p>" }
+      ]
+    }
+    // {
+    //   status: "planning",
+    //   title: 'OPERATION: "..."',
+    //   commandLine: "...",
+    //   priorityLine: "...",
+    //   unitLine: "...",
+    //   sections: [ { label: "I. THEATER", html: "<p>...</p>" }, ... ]
+    // },
+  ];
 
   function renderCampaigns(){
     const el = document.getElementById('campaigns-list');
@@ -1047,13 +1199,55 @@
       </div>
     `).join('');
   }
+  renderCampaigns();
 
   // ---------- dispatches: Calinos / sector / Imperium-wide news ----------
   // scope: "Calinos" | "Sector" | "Imperium"
   // impact: optional — a short note on how this bears on the regiment
-  // ---------- dispatches (loaded from data/dispatches.json) ----------
-  // scope: "Calinos" | "Sector" | "Imperium"
-  let dispatches = [];
+  const dispatches = [
+    {
+      scope: "Calinos",
+      title: "Munitorum planetary levy extended for a second regimental cycle",
+      date: "2026-08-20",
+      body: "The Departmento Munitorum has renewed its levy order on Calinos, authorizing continued regimental musters beyond the original single-cycle grant. Local tithe officials report the world's manufactory output remains sufficient to equip newly raised formations.",
+      impact: "Opens the door for further regiments (5th–7th) to eventually be raised alongside the 4th."
+    },
+    {
+      scope: "Calinos",
+      title: "Ashfall district reports record manufactory output",
+      date: "2026-08-15",
+      body: "Forge-overseers in the Ashfall manufactory district report the highest quarterly lasgun and flak-plate output since planetary tithe records began. Officials credit the surge to round-the-clock shifts following the renewed Munitorum levy.",
+      impact: "Improved equipment availability for the 4th Regiment's ongoing muster."
+    },
+    {
+      scope: "Sector",
+      title: "Increased hostile activity reported along the Kasr approach corridors",
+      date: "2026-08-25",
+      body: "Sector command has issued a heightened-alert bulletin for all formations operating near the Kasr approach corridors, citing a marked increase in enemy incursions over the preceding weeks.",
+      impact: "Basis for the 4th Regiment's current deployment to the Kasr-19 sector."
+    },
+    {
+      scope: "Sector",
+      title: "Armageddon Theater Command requests rapid-response tasking",
+      date: "2026-08-21",
+      body: "Armageddon Theater Command has circulated an urgent request for any formation capable of rapid insertion near Hive Deathmire, citing an isolated forward position in need of relief.",
+      impact: "Directly precedes the tasking order for Operation Swift Ash."
+    },
+    {
+      scope: "Imperium",
+      title: "Standard Munitorum record-keeping directive reissued (7/Ash)",
+      date: "2026-08-18",
+      body: "The Administratum has reissued Directive 7/Ash governing standard field-record transcription for line regiments, formalizing requirements for battle reports, casualty rolls, and correspondence handling across the Imperium.",
+      impact: "This archive is maintained in compliance with the reissued directive."
+    },
+    {
+      scope: "Imperium",
+      title: "Astropathic relay congestion reported across multiple sectors",
+      date: "2026-08-12",
+      body: "Widespread astropathic relay congestion has been reported across several adjoining sectors, attributed to elevated warp turbulence. The Administratum advises regimental chroniclers to expect delays in dispatch transcription and cross-sector correspondence.",
+      impact: "May account for any gaps in this archive's dispatch record during the affected period."
+    }
+  ];
 
   function renderDispatches(filter){
     const el = document.getElementById('dispatches-list');
@@ -1077,6 +1271,7 @@
       el.appendChild(div);
     });
   }
+  renderDispatches('all');
 
   document.querySelectorAll('#dispatches .entry-filters button[data-scope-filter]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1085,39 +1280,6 @@
       renderDispatches(btn.dataset.scopeFilter);
     });
   });
-
-  // ---------- load all data files, then render everything ----------
-  async function loadData(){
-    try {
-      const [entriesData, standingOrdersData, campaignsData, dispatchesData] = await Promise.all([
-        fetch('data/entries.json').then(r => r.json()),
-        fetch('data/standing-orders.json').then(r => r.json()),
-        fetch('data/campaigns.json').then(r => r.json()),
-        fetch('data/dispatches.json').then(r => r.json())
-      ]);
-
-      entries = entriesData;
-      standingOrders = standingOrdersData;
-      campaigns = campaignsData;
-      dispatches = dispatchesData;
-
-      renderEntries('all');
-      if (entries.length > 0) {
-        const latestDate = sortedEntries()[0].date;
-        document.getElementById('last-updated-display').innerText = formatDate(latestDate);
-      }
-      renderCommTraffic();
-      renderStandingOrders();
-      renderCampaigns();
-      renderDispatches('all');
-    } catch (err) {
-      console.error('Failed to load site data:', err);
-      const notice = 'Unable to load regimental records. This page must be viewed over a live web server (e.g. your GitHub Pages URL) \u2014 opening index.html directly from a folder on your computer will not load the data files.';
-      const entriesEl2 = document.getElementById('entries');
-      if (entriesEl2) entriesEl2.innerHTML = '<p style="color:var(--paper-dim);font-family:var(--font-mono);font-size:12px;">' + notice + '</p>';
-    }
-  }
-  loadData();
 </script>
 </body>
 </html>

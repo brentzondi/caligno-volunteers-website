@@ -1,0 +1,44 @@
+[
+  {
+    "scope": "Calinos",
+    "title": "Munitorum planetary levy extended for a second regimental cycle",
+    "date": "2026-08-20",
+    "body": "The Departmento Munitorum has renewed its levy order on Calinos, authorizing continued regimental musters beyond the original single-cycle grant. Local tithe officials report the world's manufactory output remains sufficient to equip newly raised formations.",
+    "impact": "Opens the door for further regiments (5th–7th) to eventually be raised alongside the 4th."
+  },
+  {
+    "scope": "Calinos",
+    "title": "Ashfall district reports record manufactory output",
+    "date": "2026-08-15",
+    "body": "Forge-overseers in the Ashfall manufactory district report the highest quarterly lasgun and flak-plate output since planetary tithe records began. Officials credit the surge to round-the-clock shifts following the renewed Munitorum levy.",
+    "impact": "Improved equipment availability for the 4th Regiment's ongoing muster."
+  },
+  {
+    "scope": "Sector",
+    "title": "Increased hostile activity reported along the Kasr approach corridors",
+    "date": "2026-08-25",
+    "body": "Sector command has issued a heightened-alert bulletin for all formations operating near the Kasr approach corridors, citing a marked increase in enemy incursions over the preceding weeks.",
+    "impact": "Basis for the 4th Regiment's current deployment to the Kasr-19 sector."
+  },
+  {
+    "scope": "Sector",
+    "title": "Armageddon Theater Command requests rapid-response tasking",
+    "date": "2026-08-21",
+    "body": "Armageddon Theater Command has circulated an urgent request for any formation capable of rapid insertion near Hive Deathmire, citing an isolated forward position in need of relief.",
+    "impact": "Directly precedes the tasking order for Operation Swift Ash."
+  },
+  {
+    "scope": "Imperium",
+    "title": "Standard Munitorum record-keeping directive reissued (7/Ash)",
+    "date": "2026-08-18",
+    "body": "The Administratum has reissued Directive 7/Ash governing standard field-record transcription for line regiments, formalizing requirements for battle reports, casualty rolls, and correspondence handling across the Imperium.",
+    "impact": "This archive is maintained in compliance with the reissued directive."
+  },
+  {
+    "scope": "Imperium",
+    "title": "Astropathic relay congestion reported across multiple sectors",
+    "date": "2026-08-12",
+    "body": "Widespread astropathic relay congestion has been reported across several adjoining sectors, attributed to elevated warp turbulence. The Administratum advises regimental chroniclers to expect delays in dispatch transcription and cross-sector correspondence.",
+    "impact": "May account for any gaps in this archive's dispatch record during the affected period."
+  }
+]

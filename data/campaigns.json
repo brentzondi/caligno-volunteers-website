@@ -1,0 +1,31 @@
+[
+  {
+    "status": "active",
+    "title": "OPERATION: \"SWIFT ASH\"",
+    "commandLine": "ASTRA MILITARUM TACTICAL COMMAND — ARMAGEDDON THEATER COMMAND",
+    "priorityLine": "IMMEDIATE — RAPID RESPONSE TASKING",
+    "unitLine": "4TH CALINOSIAN REGIMENT",
+    "sections": [
+      {
+        "label": "I. THEATER",
+        "html": "<p>Volcanus Theater, southern approach to Hive Deathmire.</p>"
+      },
+      {
+        "label": "II. SITUATION",
+        "html": "<p>A forward operating position, designated FOB EMBER, was established by elements of the Blood Angels Chapter during the opening movements of the current offensive. FOB EMBER has since been isolated by xenos elements advancing from the Deathmire approaches. Vox contact, though intermittent, confirms the position is still held.</p><p><strong>Confirmed survivors:</strong> A Blood Angels Champion, sole remaining member of his strike element, is holding FOB EMBER alone.</p>"
+      },
+      {
+        "label": "III. MISSION",
+        "html": "<p>The 4th Calinosian Regiment is tasked with:</p><ul><li>Rapid insertion to FOB EMBER via fastest viable approach, hostile presence notwithstanding.</li><li>Relieve Blood Angels units — this office anticipates hostile elements in close proximity to or inside the FOB perimeter.</li><li>Extraction of the Champion, alive if breathing, recovered if not. Astartes gene-seed recovery protocol applies without exception — this office reminds all personnel that recovery of a fallen Astartes takes priority over regimental casualties short of total mission failure.</li><li>Hold FOB EMBER for the minimum duration required to complete extraction, or as ordered by command.</li></ul>"
+      },
+      {
+        "label": "IV. ASSESSMENT",
+        "html": "<p>This office notes, without further comment, that this tasking constitutes the Calinosians' first combat activation. It is also, by coincidence or design, precisely the mission this regiment was built for, with no other forces close enough to reach the FOB in time.</p><p>The Blood Angels do not ask for rescue. This office trusts that will not stop the 4th from giving it.</p>"
+      },
+      {
+        "label": "V. AUTHORIZATION",
+        "html": "<p class=\"status-cleared\">Cleared for immediate execution.</p>"
+      }
+    ]
+  }
+]
