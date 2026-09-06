@@ -1,44 +1,49 @@
 [
+
+  {
+    "scope": "Calinos",
+    "title": "HOME DEFENSE AIR ASSETS INDUCTED FOR FRONTLINE SERVICE; COHIBITOR COMMAND FORMS HELLWING CORPS",
+    "date": "2026-09-06",
+    "body": "<p> CThe Navis Imperialis has formally inducted organic air assets, previously reserved for homeworld emergency response duties on Caligno, into combat service for the first time. The newly designated Calignosian Hellwing Corps will now deploy alongside ground elements in active theaters of the Fourth Armageddon War, marking the first time these aircraft have left Caligno's atmosphere for a warzone.<p/. <p>The airframes and crews inducted into the Hellwing Corps were drawn from squadrons that flew search-and-rescue, firefighting, and disaster-response sorties over the ashlands and industrial districts during Searings and containment emergencies. Navis Imperialis assessors noted that the same skills which kept these crews flying into toxic geyser fields and ashstorm-grounded visibility on Caligno translate directly to combat extraction and close support in hostile theaters.</p> <p>Formation of the Hellwing Corps follows the naming precedent set by ground elements after the Ember engagement, extending the Hellfighter identity to Cohibitor forces operating in the air for the first time.</p> <p>Further detail on Hellwing Corps composition, aircraft, and operational doctrine is expected as the Corps completes deployment to theater.</p>",
+    "impact": "Opens the door for further regiments (5th–7th) to eventually be raised alongside the 4th."
+  },
+
+  {
+    "scope": "Calinos",
+    "title": "COHIBITOR COMMAND OVERHAULS HELMET INSIGNIA SCHEME ACROSS ALL SERVICES",
+    "date": "2026-09-05",
+    "body": "<p> Cohibitor High Command has issued a revised helmet insignia standard for all Cadian-pattern helmets worn across Cohibitor regiments, replacing the previous single-color helmet scheme in full. The helmet has long stood as the most visible mark of pride and identity within Cohibitor ranks, and command cited that standing as reason for bringing the insignia in line with the realities of the current campaign.<p/. <p> Under the new standard, shell and skull colors are paired to indicate a trooper's operational role and standing within the Hellfighter designation. Command confirmed the new scheme fully supersedes the regiment's earlier helmet standard, with no legacy carryover. Distribution of updated helmet shells and skull decals to frontline units is expected to follow standard Munitorum logistics timelines.</p>",
+    "impact": "Opens the door for further regiments (5th–7th) to eventually be raised alongside the 4th."
+  },
   {
     "scope": "Calinos",
     "title": "Munitorum planetary levy extended for a second regimental cycle",
-    "date": "2026-08-20",
+    "date": "2026-09-01",
     "body": "The Departmento Munitorum has renewed its levy order on Calinos, authorizing continued regimental musters beyond the original single-cycle grant. Local tithe officials report the world's manufactory output remains sufficient to equip newly raised formations.",
     "impact": "Opens the door for further regiments (5th–7th) to eventually be raised alongside the 4th."
   },
   {
     "scope": "Calinos",
     "title": "Ashfall district reports record manufactory output",
-    "date": "2026-08-15",
-    "body": "Forge-overseers in the Ashfall manufactory district report the highest quarterly lasgun and flak-plate output since planetary tithe records began. Officials credit the surge to round-the-clock shifts following the renewed Munitorum levy.",
-    "impact": "Improved equipment availability for the 4th Regiment's ongoing muster."
-  },
-  {
-    "scope": "Sector",
-    "title": "Increased hostile activity reported along the Kasr approach corridors",
-    "date": "2026-08-25",
-    "body": "Sector command has issued a heightened-alert bulletin for all formations operating near the Kasr approach corridors, citing a marked increase in enemy incursions over the preceding weeks.",
-    "impact": "Basis for the 4th Regiment's current deployment to the Kasr-19 sector."
+    "date": "2026-08-22",
+    "body": "Forge-overseers in the Ashfall manufactory district report the highest quarterly lasgun and flak-plate output since planetary tithe records began. Officials credit the surge to round-the-clock shifts following the renewed Munitorum levy."
   },
   {
     "scope": "Sector",
     "title": "Armageddon Theater Command requests rapid-response tasking",
     "date": "2026-08-21",
-    "body": "Armageddon Theater Command has circulated an urgent request for any formation capable of rapid insertion near Hive Deathmire, citing an isolated forward position in need of relief.",
-    "impact": "Directly precedes the tasking order for Operation Swift Ash."
+    "body": "Armageddon Theater Command has circulated an urgent request for any formation capable of rapid insertion near Hive Deathmire, citing an isolated forward position in need of relief."
   },
   {
     "scope": "Imperium",
     "title": "Standard Munitorum record-keeping directive reissued (7/Ash)",
     "date": "2026-08-18",
-    "body": "The Administratum has reissued Directive 7/Ash governing standard field-record transcription for line regiments, formalizing requirements for battle reports, casualty rolls, and correspondence handling across the Imperium.",
-    "impact": "This archive is maintained in compliance with the reissued directive."
+    "body": "The Administratum has reissued Directive 7/Ash governing standard field-record transcription for line regiments, formalizing requirements for battle reports, casualty rolls, and correspondence handling across the Imperium."
   },
   {
     "scope": "Imperium",
     "title": "Astropathic relay congestion reported across multiple sectors",
     "date": "2026-08-12",
-    "body": "Widespread astropathic relay congestion has been reported across several adjoining sectors, attributed to elevated warp turbulence. The Administratum advises regimental chroniclers to expect delays in dispatch transcription and cross-sector correspondence.",
-    "impact": "May account for any gaps in this archive's dispatch record during the affected period."
+    "body": "Widespread astropathic relay congestion has been reported across several adjoining sectors, attributed to elevated warp turbulence. The Administratum advises regimental chroniclers to expect delays in dispatch transcription and cross-sector correspondence."
   }
 ]
