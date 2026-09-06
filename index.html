@@ -725,8 +725,8 @@
     <p class="section-sub">Current regimental commitments and command directives, updated as operations develop.</p>
 
     <div class="dossier-grid">
-
-        <h3 class="side-heading" style="margin-top:36px;">Active Campaigns</h3>
+      <div>
+        <h3 class="side-heading">Active Campaigns</h3>
         <div id="campaigns-list"></div>
       </div>
 
@@ -1011,19 +1011,44 @@
   function renderCommTraffic(){
     const el = document.getElementById('comm-traffic');
     if (!el) return;
-    const recent = sortedEntries().slice(0, 3);
-    el.innerHTML = recent.map(e => {
-      const { filedBy, clearance, ref } = parseMeta(e.meta);
-      const plainBody = e.vox ? e.body.replace(/<br\s*\/?>/gi, ' ').replace(/\[[^\]]*\]/g, '') : e.body.replace(/<[^>]*>/g, '');
+
+    const fromEntries = entries.map(e => ({ kind: 'entry', date: e.date, title: e.title, body: e.body, meta: e.meta, vox: e.vox }));
+    const fromDispatches = dispatches.map(d => ({ kind: 'dispatch', date: d.date, title: d.title, body: d.body, scope: d.scope }));
+
+    const recent = [...fromEntries, ...fromDispatches]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 5);
+
+    el.innerHTML = recent.map(item => {
+      const plainBody = item.vox
+        ? item.body.replace(/<br\s*\/?>/gi, ' ').replace(/\[[^\]]*\]/g, '')
+        : item.body.replace(/<[^>]*>/g, '');
       const snippet = plainBody.length > 130 ? plainBody.slice(0, 130).trim() + '…' : plainBody.trim();
+
+      if (item.kind === 'entry') {
+        const { filedBy, clearance, ref } = parseMeta(item.meta);
+        return `
+          <div class="comm-card">
+            <div class="comm-routing">
+              TO: <b>MUNITORUM SECTOR COMMAND</b><br>
+              FROM: <b>${filedBy}</b><br>
+              REF: ${ref} &nbsp;<span class="comm-priority">${clearance}</span>
+            </div>
+            <div class="comm-subject">RE: ${item.title}</div>
+            <div class="comm-snippet">${snippet}</div>
+          </div>
+        `;
+      }
+
+      const scopeLabel = item.scope === 'Calinos' ? 'Calinos' : item.scope === 'Sector' ? 'Sector' : 'Imperium-Wide';
       return `
         <div class="comm-card">
           <div class="comm-routing">
             TO: <b>MUNITORUM SECTOR COMMAND</b><br>
-            FROM: <b>${filedBy}</b><br>
-            REF: ${ref} &nbsp;<span class="comm-priority">${clearance}</span>
+            FROM: <b>Astropathic Relay</b><br>
+            SCOPE: ${scopeLabel} &nbsp;<span class="comm-priority">Dispatch</span>
           </div>
-          <div class="comm-subject">RE: ${e.title}</div>
+          <div class="comm-subject">RE: ${item.title}</div>
           <div class="comm-snippet">${snippet}</div>
         </div>
       `;
