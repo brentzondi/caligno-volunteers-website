@@ -1,4 +1,12 @@
 [
+	{
+    "type": "Soldier's Journal",
+    "title": "Entry — Motto in Honor of Hotshot Voss",
+    "date": "2026-09-09",
+    "meta": "FILED BY: CPT Brenticles · CLEARANCE: PERSONAL",
+    "body": "I've been hearing some of the men saying <em>Trough Hell</em> and <em>Last Out</em> to each other when going on patrols and missions. I'm assuming the last vox exchange I had with Lt Voss is being repeated in memory of him and honor of him. I may take the step to take on this phrase for the regiments motto. I will discuss further with command.",
+    "journal": true
+	
   {
     "type": "After Action Report",
     "title": "AFTER-ACTION REPORT ARM42 — Dugruk Ork Attack on FOB Ember",
@@ -11,7 +19,7 @@
     "type": "Vox Traffic",
     "title": "FOB EMBER TO 407TH COMMAND",
     "date": "2026-08-19",
-    "body": "[LT Vorne] Vorne to Command, contact report. Visual on hostile Ork force approaching. Platoon sized element with light support. Requesting instructions.<br>[CPT Brenticles] Vorne, this is Captain Brenticles. Hold FOB Ember through all hell. Reinforcements will be enroute direct.<br>[LT Vorne] We were the first here, we'll be the last out.",
+    "body": "[LT Voss] Vorne to Command, contact report. Visual on hostile Ork force approaching. Platoon sized element with light support. Requesting instructions.<br>[CPT Brenticles] Vorne, this is Captain Brenticles. Hold FOB Ember through all hell. Reinforcements will be enroute direct.<br>[LT Voss] We were the first here, we'll be the last out.",
     "vox": true
   },
   {
