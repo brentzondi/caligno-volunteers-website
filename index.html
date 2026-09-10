@@ -1238,20 +1238,74 @@
     });
   });
 
+  // ---------- TO&E (loaded from data/units.json) ----------
+  // status: active | deployed | refit | mia | kia
+  // quantity: { total: models requisitioned, building: still in production/unfinished }
+  // attachment: company/battalion assignment (logistics, not battlefield location)
+  let unitsByRegiment = {};
+
+  function renderTOE(){
+    const toeContainer = document.getElementById('toe-regiments');
+    if (!toeContainer) return;
+    toeContainer.innerHTML = '';
+
+    Object.entries(unitsByRegiment).forEach(([regimentName, regimentData]) => {
+      const section = document.createElement('div');
+      section.className = 'regiment-section';
+
+      const table = document.createElement('table');
+      table.className = 'oob-table';
+      const tbody = document.createElement('tbody');
+
+      regimentData.units.forEach(u => {
+        const tr = document.createElement('tr');
+        const ready = u.quantity.total - u.quantity.building;
+        const productionBadge = u.quantity.building > 0
+          ? `<span class="stamp production">${u.quantity.building} in production</span>`
+          : '';
+        tr.innerHTML = `
+          <td><div class="unit-name">${u.name}</div><div class="unit-role">${u.role}</div></td>
+          <td><span class="stamp ${u.status}">${u.status}</span></td>
+          <td>
+            <div class="muster-cell">
+              <div class="muster-count">${ready} <span class="of">/ ${u.quantity.total} mustered</span></div>
+              ${productionBadge}
+            </div>
+          </td>
+          <td class="loc">${u.attachment}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      section.innerHTML = `
+        <div class="regiment-section-heading">${regimentName}</div>
+        <div class="regiment-section-sub">${regimentData.subtitle}</div>
+      `;
+      table.innerHTML = `
+        <thead><tr><th>Unit Designation</th><th>Operational Status</th><th>Muster Strength</th><th>Attachment</th></tr></thead>
+      `;
+      table.appendChild(tbody);
+      section.appendChild(table);
+      toeContainer.appendChild(section);
+    });
+  }
+
   // ---------- load all data files, then render everything ----------
   async function loadData(){
     try {
-      const [entriesData, standingOrdersData, campaignsData, dispatchesData] = await Promise.all([
+      const [entriesData, standingOrdersData, campaignsData, dispatchesData, unitsData] = await Promise.all([
         fetch('data/entries.json').then(r => r.json()),
         fetch('data/standing-orders.json').then(r => r.json()),
         fetch('data/campaigns.json').then(r => r.json()),
-        fetch('data/dispatches.json').then(r => r.json())
+        fetch('data/dispatches.json').then(r => r.json()),
+        fetch('data/units.json').then(r => r.json())
       ]);
 
       entries = entriesData;
       standingOrders = standingOrdersData;
       campaigns = campaignsData;
       dispatches = dispatchesData;
+      unitsByRegiment = unitsData;
 
       renderEntries('all');
       if (entries.length > 0) {
@@ -1262,6 +1316,7 @@
       renderStandingOrders();
       renderCampaigns();
       renderDispatches('all');
+      renderTOE();
     } catch (err) {
       console.error('Failed to load site data:', err);
       const notice = 'Unable to load regimental records. This page must be viewed over a live web server (e.g. your GitHub Pages URL) \u2014 opening index.html directly from a folder on your computer will not load the data files.';
