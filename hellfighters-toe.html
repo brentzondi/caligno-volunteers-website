@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CGN-R4 Table of Organization &amp; Equipment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vollkorn:ital,wght@0,500;0,600;0,700;1,500&family=Special+Elite&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #e9e0c8;
+    --paper-dark: #dcd0ac;
+    --paper-shadow: #c7b98c;
+    --ink: #241f16;
+    --ink-soft: #58503b;
+    --rust: #8c3b24;
+    --brass: #96742a;
+    --olive: #4f5536;
+    --line: rgba(36,31,22,0.35);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:40px 16px 80px;
+    background:
+      radial-gradient(ellipse at top left, rgba(255,255,255,0.08), transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(0,0,0,0.10), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Vollkorn', serif;
+    display:flex;
+    justify-content:center;
+  }
+  .sheet{
+    width:100%;
+    max-width:1040px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    box-shadow: 0 1px 0 var(--paper-shadow), 0 18px 40px rgba(20,16,8,0.25);
+    position:relative;
+    padding:52px 40px 40px;
+  }
+  .sheet::before{
+    content:"";
+    position:absolute; inset:10px;
+    border:1px solid var(--line);
+    pointer-events:none;
+  }
+  [contenteditable="true"]{ outline:none; }
+  .edit .editable{ background:rgba(140,59,36,0.07); box-shadow: inset 0 -1px 0 var(--rust); }
+  .edit .editable:focus{ background:rgba(140,59,36,0.14); }
+
+  /* ---------- toolbar ---------- */
+  .toolbar{
+    max-width:1040px; width:100%;
+    display:flex; justify-content:flex-end; gap:10px;
+    margin:0 auto 14px;
+    font-family:'JetBrains Mono', monospace; font-size:11.5px; letter-spacing:.03em;
+  }
+  .toolbar button{ background:var(--ink); color:var(--paper); border:none; padding:9px 14px; cursor:pointer; letter-spacing:.05em; }
+  .toolbar button:hover{ background:var(--rust); }
+  .toolbar button.ghost{ background:transparent; color:var(--ink); border:1px solid var(--ink); }
+  .toolbar button.ghost:hover{ border-color:var(--rust); color:var(--rust); }
+  .save-note{ font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--ink-soft); align-self:center; margin-right:auto; min-height:14px; }
+
+  /* ---------- letterhead ---------- */
+  .letterhead{ display:flex; align-items:flex-start; gap:22px; border-bottom:3px double var(--ink); padding-bottom:16px; margin-bottom:4px; }
+  .crest{ flex:0 0 auto; }
+  .letterhead-text{ flex:1; min-width:0; }
+  .eyebrow{ font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.14em; color:var(--ink-soft); }
+  h1.regiment-name{ font-family:'Vollkorn', serif; font-weight:700; font-size:clamp(24px,3.6vw,34px); margin:4px 0 2px; line-height:1.05; }
+  .designation-row{ display:flex; gap:18px; flex-wrap:wrap; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--ink-soft); margin-top:6px; }
+  .designation-row b{ color:var(--ink); font-weight:600; }
+  .motto{ font-family:'Vollkorn', serif; font-style:italic; font-size:14px; color:var(--olive); margin-top:8px; }
+
+  .stamp{
+    position:absolute; top:40px; right:40px; width:110px; height:110px;
+    border:3px solid var(--rust); border-radius:50%; color:var(--rust);
+    font-family:'Special Elite', monospace; display:flex; align-items:center; justify-content:center;
+    text-align:center; transform:rotate(-9deg); opacity:.8; mix-blend-mode:multiply;
+    font-size:9.5px; line-height:1.3; letter-spacing:.05em; padding:8px; pointer-events:none;
+  }
+  .stamp .big{ font-size:13px; margin:2px 0; }
+
+  /* ---------- ORG CHART ---------- */
+  .chart-title{
+    font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.12em;
+    color:var(--ink-soft); text-align:center; margin:26px 0 4px;
+  }
+  .chart-scroll{ overflow-x:auto; padding:10px 4px 6px; }
+  .org-tree, .org-tree ul{
+    display:flex; justify-content:center; padding-top:26px; position:relative; margin:0;
+  }
+  .org-tree{ padding-top:0; }
+  .org-tree li{ list-style:none; text-align:center; position:relative; padding:26px 12px 0; }
+  .org-tree > li{ padding-top:0; }
+  .org-tree li ul::before{
+    content:''; position:absolute; top:0; left:50%; width:0; height:26px;
+    border-left:1.5px solid var(--ink-soft); transform:translateX(-0.75px);
+  }
+  .org-tree li li::before, .org-tree li li::after{
+    content:''; position:absolute; top:0; right:50%; width:50%; height:26px;
+    border-top:1.5px solid var(--ink-soft);
+  }
+  .org-tree li li::after{ right:auto; left:50%; border-left:1.5px solid var(--ink-soft); }
+  .org-tree li li:only-child::before, .org-tree li li:only-child::after{ display:none; }
+  .org-tree li li:first-child::before{ border:0 none; }
+  .org-tree li li:last-child::after{ border:0 none; }
+  .org-tree li li:last-child::before{ border-right:1.5px solid var(--ink-soft); }
+  .org-tree li li:first-child::after{ border-left:1.5px solid var(--ink-soft); }
+
+  .node{ display:inline-block; position:relative; }
+  .node-box{
+    position:relative; z-index:2; background:var(--paper-dark);
+    border:1.4px solid var(--ink); padding:9px 13px; min-width:118px; max-width:190px;
+  }
+  .node-box.stacked::before, .node-box.stacked::after{
+    content:''; position:absolute; inset:0; background:var(--paper-dark); border:1.4px solid var(--ink); z-index:-1;
+  }
+  .node-box.stacked::before{ transform:translate(6px,6px); }
+  .node-box.stacked::after{ transform:translate(12px,12px); z-index:-2; }
+
+  .node-box.root{ background:var(--ink); border-color:var(--ink); }
+  .node-box.root .node-name{ color:var(--paper); }
+  .node-box.root .node-detail{ color:var(--paper-shadow); }
+
+  .node-box.formation{ border-color:var(--rust); border-width:1.6px; }
+
+  .node-icon{ width:22px; height:22px; margin:0 auto 4px; display:block; color:var(--olive); }
+  .node-box.root .node-icon{ color:var(--brass); }
+  .node-name{
+    font-family:'Vollkorn', serif; font-weight:700; font-size:12.5px; line-height:1.2;
+  }
+  .node-sub{ font-family:'JetBrains Mono', monospace; font-size:9.5px; color:var(--ink-soft); margin-top:3px; }
+  .node-detail{ font-family:'JetBrains Mono', monospace; font-size:9.5px; color:var(--ink-soft); margin-top:3px; }
+  .qty-badge{
+    position:absolute; top:-9px; right:-9px; z-index:3; background:var(--rust); color:var(--paper);
+    font-family:'JetBrains Mono', monospace; font-size:9.5px; font-weight:600; padding:2px 6px; letter-spacing:.03em;
+  }
+
+  .node-controls{ display:none; gap:4px; justify-content:center; margin-top:5px; }
+  .edit .node-controls{ display:flex; }
+  .node-controls button{
+    font-family:'JetBrains Mono', monospace; font-size:9px; background:none; cursor:pointer;
+    border:1px solid var(--ink-soft); color:var(--ink-soft); padding:2px 6px;
+  }
+  .node-controls button:hover{ border-color:var(--rust); color:var(--rust); }
+  .node-controls button.danger{ border-color:var(--rust); color:var(--rust); }
+
+  .icon-select{
+    display:none; margin-top:4px; font-family:'JetBrains Mono', monospace; font-size:9px;
+    width:100%; background:var(--paper); border:1px solid var(--line); color:var(--ink);
+  }
+  .edit .icon-select{ display:block; }
+
+  .add-formation-wrap{ display:flex; justify-content:center; margin-top:22px; }
+  .add-formation-wrap{ display:none; }
+  .edit .add-formation-wrap{ display:flex; }
+  .add-formation-btn{
+    background:none; border:1px dashed var(--ink-soft); color:var(--ink-soft);
+    font-family:'JetBrains Mono', monospace; font-size:11px; padding:8px 16px; cursor:pointer; letter-spacing:.04em;
+  }
+  .add-formation-btn:hover{ border-color:var(--rust); color:var(--rust); }
+
+  /* ---------- manifest panels ---------- */
+  .manifest{
+    display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:34px;
+    border:1px solid var(--ink); border-bottom:3px double var(--ink);
+  }
+  .manifest-col{ padding:0; }
+  .manifest-col + .manifest-col{ border-left:1px solid var(--ink); }
+  .manifest-head{
+    background:var(--ink); color:var(--paper); font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:.1em; padding:8px 14px;
+  }
+  .manifest-lines{ padding:10px 14px 14px; }
+  .manifest-line{
+    display:flex; align-items:baseline; gap:8px; font-family:'JetBrains Mono', monospace;
+    font-size:12.5px; padding:4px 0; border-bottom:1px dashed var(--line);
+  }
+  .manifest-line:last-child{ border-bottom:none; }
+  .manifest-line .bullet{ color:var(--rust); }
+  .manifest-line .text{ flex:1; }
+  .manifest-line .del-line{ display:none; background:none; border:none; color:var(--rust); cursor:pointer; font-size:13px; }
+  .edit .manifest-line .del-line{ display:block; }
+  .add-line-btn{
+    display:none; margin-top:6px; background:none; border:1px dashed var(--ink-soft); color:var(--ink-soft);
+    font-family:'JetBrains Mono', monospace; font-size:10px; padding:5px 10px; cursor:pointer;
+  }
+  .edit .add-line-btn{ display:inline-block; }
+  .add-line-btn:hover{ border-color:var(--rust); color:var(--rust); }
+
+  /* ---------- signature ---------- */
+  .signature{
+    margin-top:30px; padding-top:14px; border-top:3px double var(--ink);
+    display:flex; justify-content:space-between; gap:24px;
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--ink-soft); flex-wrap:wrap;
+  }
+  .sig-block{ flex:1; min-width:160px; }
+  .sig-block .value{ font-family:'Special Elite', monospace; font-size:14px; color:var(--ink); border-bottom:1px solid var(--line); padding:6px 2px 8px; min-height:20px; }
+  .sig-block .label{ margin-top:6px; letter-spacing:.06em; }
+
+  @media (max-width:640px){
+    .sheet{ padding:32px 16px 28px; }
+    .stamp{ width:84px; height:84px; top:18px; right:18px; font-size:8px; }
+    .stamp .big{ font-size:11px; }
+    .manifest{ grid-template-columns:1fr; }
+    .manifest-col + .manifest-col{ border-left:none; border-top:1px solid var(--ink); }
+  }
+
+  @media print{
+    body{ padding:0; background:var(--paper); }
+    .toolbar{ display:none; }
+    .sheet{ box-shadow:none; border:none; }
+    .node-controls, .add-formation-wrap, .add-line-btn, .del-line, .icon-select{ display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <span class="save-note" id="saveNote"></span>
+    <button class="ghost" id="editToggle">AMEND RECORD</button>
+    <button id="printBtn">PRINT / EXPORT</button>
+  </div>
+
+  <div class="sheet edit" id="sheet">
+
+    <div class="stamp">
+      <span>DEPARTMENTO</span>
+      <span>MUNITORUM</span>
+      <span class="big">AUTHORIZED</span>
+      <span>CGN-R4 · TO&amp;E</span>
+    </div>
+
+    <div class="letterhead">
+      <div class="crest">
+        <svg width="58" height="58" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" stroke="#241f16" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="25" stroke="#96742a" stroke-width="1"/>
+          <path d="M32 12 L36 26 L50 26 L38 34 L42 48 L32 39 L22 48 L26 34 L14 26 L28 26 Z" fill="#8c3b24" opacity="0.85"/>
+          <path d="M32 6 L32 58 M8 32 L56 32" stroke="#241f16" stroke-width="0.6" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="letterhead-text">
+        <div class="eyebrow">MUNITORUM REGIMENTAL RECORD — TABLE OF ORGANIZATION &amp; EQUIPMENT</div>
+        <h1 class="regiment-name editable" contenteditable="true" data-field="name">Calinosian Hellfighters</h1>
+        <div class="designation-row">
+          <span><b>Designation:</b> <span class="editable" contenteditable="true" data-field="designation">4th Regiment / CGN-R4</span></span>
+          <span><b>Home World:</b> <span class="editable" contenteditable="true" data-field="homeworld">Caligo Minor</span></span>
+        </div>
+        <div class="motto editable" contenteditable="true" data-field="motto">"In Caligine, Fides"</div>
+      </div>
+    </div>
+
+    <div class="chart-title">TABLE OF ORGANIZATION — CHAIN OF COMMAND</div>
+    <div class="chart-scroll">
+      <ul class="org-tree" id="chart"></ul>
+    </div>
+    <div class="add-formation-wrap">
+      <button class="add-formation-btn" id="addFormationBtn">+ ADD FORMATION UNDER REGIMENT</button>
+    </div>
+
+    <div class="manifest">
+      <div class="manifest-col">
+        <div class="manifest-head">REGIMENT TO&amp;E — PERSONNEL</div>
+        <div class="manifest-lines" id="personnelLines"></div>
+        <div style="padding:0 14px 14px;"><button class="add-line-btn" data-list="personnel">+ ADD LINE</button></div>
+      </div>
+      <div class="manifest-col">
+        <div class="manifest-head">VEHICLES &amp; ASSETS</div>
+        <div class="manifest-lines" id="vehicleLines"></div>
+        <div style="padding:0 14px 14px;"><button class="add-line-btn" data-list="vehicles">+ ADD LINE</button></div>
+      </div>
+    </div>
+
+    <div class="signature">
+      <div class="sig-block"><div class="value editable" contenteditable="true" data-field="filedBy">&nbsp;</div><div class="label">FILED BY</div></div>
+      <div class="sig-block"><div class="value editable" contenteditable="true" data-field="rank">&nbsp;</div><div class="label">RANK / OFFICE</div></div>
+      <div class="sig-block"><div class="value editable" contenteditable="true" data-field="authNo">&nbsp;</div><div class="label">AUTHORIZATION NO.</div></div>
+    </div>
+
+  </div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'toe-record-v2';
+  const sheet = document.getElementById('sheet');
+  const chart = document.getElementById('chart');
+  const personnelLines = document.getElementById('personnelLines');
+  const vehicleLines = document.getElementById('vehicleLines');
+  const saveNote = document.getElementById('saveNote');
+  let saveTimer = null;
+  let editMode = true;
+
+  const ICONS = {
+    command: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.2 5.6L20 9l-4.6 3.6L16.8 19 12 15.3 7.2 19l1.4-6.4L4 9l5.8-1.4L12 2z" fill="currentColor"/></svg>',
+    infantry: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="5.5" r="2.6" fill="currentColor"/><path d="M12 9c-3 0-5 1.8-5 4.4V17h2.2l.5 5h4.6l.5-5H17v-3.6C17 10.8 15 9 12 9z" fill="currentColor"/></svg>',
+    heavy: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="10" width="16" height="7" fill="currentColor"/><rect x="9" y="5" width="6" height="6" fill="currentColor"/><rect x="3" y="17.5" width="18" height="2" fill="currentColor"/></svg>',
+    vehicle: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="12" width="20" height="5" fill="currentColor"/><rect x="7" y="7" width="8" height="6" fill="currentColor"/><rect x="14" y="9" width="7" height="2.4" fill="currentColor"/><circle cx="6.5" cy="18.5" r="1.6" fill="currentColor"/><circle cx="17.5" cy="18.5" r="1.6" fill="currentColor"/></svg>',
+    cavalry: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 18h3l1-4 3-2 2 1 2-3 4-1-1 3-3 2 1 4h3v1H4v-1z" fill="currentColor"/></svg>',
+    aircraft: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l2 6 7 4-7 1-1 6-1-6-7-1 7-4z" fill="currentColor"/></svg>',
+    support: '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 3h2v3.3a6 6 0 011.6.7l2.4-1.9 1.4 1.4-1.9 2.4c.3.5.6 1 .7 1.6H21v2h-3.3a6 6 0 01-.7 1.6l1.9 2.4-1.4 1.4-2.4-1.9a6 6 0 01-1.6.7V21h-2v-3.3a6 6 0 01-1.6-.7l-2.4 1.9-1.4-1.4 1.9-2.4A6 6 0 015.3 13H2v-2h3.3c.1-.6.4-1.1.7-1.6L4.1 6.9l1.4-1.4 2.4 1.9c.5-.3 1-.6 1.6-.7V3zm1 6a3 3 0 100 6 3 3 0 000-6z" fill="currentColor"/></svg>'
+  };
+  function iconSvg(type){ return ICONS[type] || ICONS.infantry; }
+
+  const defaultState = {
+    header: {
+      name: 'Calinosian Hellfighters', designation: '4th Regiment / CGN-R4', homeworld: 'Caligo Minor',
+      motto: '"In Caligine, Fides"', filedBy: '', rank: '', authNo: ''
+    },
+    formations: [
+      {
+        id:'c1', name:'7th Armored Company', sub:'"Smokewalkers" — Lt. Kellen Voss', iconType:'command', qty:'',
+        units: [
+          { id:'u1', name:'Kasrkin Strike Squad', iconType:'infantry', detail:'10 Guardsmen, hellguns', qty:'' },
+          { id:'u2', name:'Rough Rider Lance', iconType:'cavalry', detail:'8 riders, hunting lances', qty:'' },
+          { id:'u3', name:'Tempestus Scions', iconType:'aircraft', detail:'10 Scions, hot-shot lasguns', qty:'' },
+          { id:'u4', name:'Rogal Dorn "Embers Wrath"', iconType:'heavy', detail:'Battle cannon, HB sponsons', qty:'' },
+          { id:'u5', name:'Cadian Shock Platoon', iconType:'infantry', detail:'30 Guardsmen, lasguns', qty:'' }
+        ]
+      },
+      {
+        id:'c2', name:'1st Company', sub:'Command &amp; Support', iconType:'support', qty:'',
+        units: [
+          { id:'u6', name:'Regimental Command Squad', iconType:'command', detail:'6 staff, vox-caster', qty:'' }
+        ]
+      }
+    ],
+    manifest: {
+      personnel: ['1 Colonel','1 Adjutant','46 Kasrkin','8 Rough Riders','30 Tempestus Scions','120 Guardsmen'],
+      vehicles: ['1 Rogal Dorn','3 Chimera APC','2 Valkyrie']
+    }
+  };
+
+  let state = null;
+
+  function uid(p){ return p + Math.random().toString(36).slice(2,8); }
+
+  function makeControls(onAddUnit, onDelete){
+    const wrap = document.createElement('div');
+    wrap.className = 'node-controls';
+    if (onAddUnit){
+      const b = document.createElement('button');
+      b.textContent = '+ unit'; b.addEventListener('click', onAddUnit);
+      wrap.appendChild(b);
+    }
+    if (onDelete){
+      const b = document.createElement('button');
+      b.className = 'danger'; b.textContent = '× remove'; b.addEventListener('click', onDelete);
+      wrap.appendChild(b);
+    }
+    return wrap;
+  }
+
+  function makeIconSelect(current, onChange){
+    const sel = document.createElement('select');
+    sel.className = 'icon-select';
+    Object.keys(ICONS).forEach(k => {
+      const opt = document.createElement('option');
+      opt.value = k; opt.textContent = k;
+      if (k === current) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', e => onChange(e.target.value));
+    return sel;
+  }
+
+  function buildUnitLi(unit, formation){
+    const li = document.createElement('li');
+    const box = document.createElement('div');
+    box.className = 'node-box unit' + (unit.qty ? ' stacked' : '');
+    const iconHolder = document.createElement('div');
+    iconHolder.className = 'node-icon';
+    iconHolder.innerHTML = iconSvg(unit.iconType);
+    box.appendChild(iconHolder);
+    if (unit.qty){
+      const badge = document.createElement('div');
+      badge.className = 'qty-badge'; badge.textContent = '×' + unit.qty;
+      box.appendChild(badge);
+    }
+    const name = document.createElement('div');
+    name.className = 'node-name editable'; name.contentEditable = 'true';
+    name.textContent = unit.name;
+    name.addEventListener('blur', e => { unit.name = e.target.textContent; scheduleSave(); });
+    box.appendChild(name);
+    const detail = document.createElement('div');
+    detail.className = 'node-detail editable'; detail.contentEditable = 'true';
+    detail.textContent = unit.detail;
+    detail.addEventListener('blur', e => { unit.detail = e.target.textContent; scheduleSave(); });
+    box.appendChild(detail);
+    box.appendChild(makeIconSelect(unit.iconType, v => { unit.iconType = v; render(); scheduleSave(); }));
+    box.appendChild(makeControls(null, () => {
+      formation.units = formation.units.filter(u => u.id !== unit.id);
+      render(); scheduleSave();
+    }));
+    li.appendChild(box);
+    return li;
+  }
+
+  function buildFormationLi(formation){
+    const li = document.createElement('li');
+    const box = document.createElement('div');
+    box.className = 'node-box formation';
+    const iconHolder = document.createElement('div');
+    iconHolder.className = 'node-icon';
+    iconHolder.innerHTML = iconSvg(formation.iconType);
+    box.appendChild(iconHolder);
+    const name = document.createElement('div');
+    name.className = 'node-name editable'; name.contentEditable = 'true';
+    name.textContent = formation.name;
+    name.addEventListener('blur', e => { formation.name = e.target.textContent; scheduleSave(); });
+    box.appendChild(name);
+    const sub = document.createElement('div');
+    sub.className = 'node-sub editable'; sub.contentEditable = 'true';
+    sub.textContent = formation.sub;
+    sub.addEventListener('blur', e => { formation.sub = e.target.textContent; scheduleSave(); });
+    box.appendChild(sub);
+    box.appendChild(makeIconSelect(formation.iconType, v => { formation.iconType = v; render(); scheduleSave(); }));
+    box.appendChild(makeControls(
+      () => { formation.units.push({ id:uid('u'), name:'New Unit', iconType:'infantry', detail:'', qty:'' }); render(); scheduleSave(); },
+      () => { state.formations = state.formations.filter(f => f.id !== formation.id); render(); scheduleSave(); }
+    ));
+    li.appendChild(box);
+
+    if (formation.units && formation.units.length){
+      const ul = document.createElement('ul');
+      formation.units.forEach(u => ul.appendChild(buildUnitLi(u, formation)));
+      li.appendChild(ul);
+    }
+    return li;
+  }
+
+  function render(){
+    chart.innerHTML = '';
+    const rootLi = document.createElement('li');
+    const rootBox = document.createElement('div');
+    rootBox.className = 'node-box root';
+    rootBox.innerHTML = `<div class="node-icon">${iconSvg('command')}</div>`;
+    const rn = document.createElement('div');
+    rn.className = 'node-name'; rn.textContent = state.header.name.toUpperCase();
+    const rd = document.createElement('div');
+    rd.className = 'node-detail'; rd.textContent = state.header.designation;
+    rootBox.appendChild(rn); rootBox.appendChild(rd);
+    rootLi.appendChild(rootBox);
+
+    const ul = document.createElement('ul');
+    state.formations.forEach(f => ul.appendChild(buildFormationLi(f)));
+    rootLi.appendChild(ul);
+    chart.appendChild(rootLi);
+
+    renderManifest();
+  }
+
+  function renderManifest(){
+    personnelLines.innerHTML = '';
+    state.manifest.personnel.forEach((line, i) => personnelLines.appendChild(buildManifestLine(line, 'personnel', i)));
+    vehicleLines.innerHTML = '';
+    state.manifest.vehicles.forEach((line, i) => vehicleLines.appendChild(buildManifestLine(line, 'vehicles', i)));
+  }
+
+  function buildManifestLine(text, listName, idx){
+    const row = document.createElement('div');
+    row.className = 'manifest-line';
+    const bullet = document.createElement('span'); bullet.className = 'bullet'; bullet.textContent = '—';
+    const span = document.createElement('span');
+    span.className = 'text editable'; span.contentEditable = 'true'; span.textContent = text;
+    span.addEventListener('blur', e => { state.manifest[listName][idx] = e.target.textContent; scheduleSave(); });
+    const del = document.createElement('button'); del.className = 'del-line'; del.textContent = '×';
+    del.addEventListener('click', () => { state.manifest[listName].splice(idx,1); renderManifest(); scheduleSave(); });
+    row.appendChild(bullet); row.appendChild(span); row.appendChild(del);
+    return row;
+  }
+
+  function bindHeaderFields(){
+    sheet.querySelectorAll('.letterhead [data-field], .signature [data-field]').forEach(el => {
+      el.addEventListener('blur', e => { state.header[e.target.dataset.field] = e.target.textContent; scheduleSave(); });
+    });
+  }
+  function applyHeader(){
+    Object.keys(state.header).forEach(key => {
+      const el = sheet.querySelector(`.letterhead [data-field="${key}"], .signature [data-field="${key}"]`);
+      if (el) el.textContent = state.header[key] || '';
+    });
+  }
+
+  function scheduleSave(){
+    saveNote.textContent = 'Unsaved changes…';
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveState, 700);
+  }
+  async function saveState(){
+    try{
+      const result = await window.storage.set(STORAGE_KEY, JSON.stringify(state), false);
+      saveNote.textContent = result ? ('Saved ' + new Date().toLocaleTimeString()) : 'Save failed — changes kept in this session only';
+    }catch(err){ console.error(err); saveNote.textContent = 'Save failed — changes kept in this session only'; }
+  }
+  async function loadState(){
+    try{
+      const result = await window.storage.get(STORAGE_KEY, false);
+      state = result && result.value ? JSON.parse(result.value) : JSON.parse(JSON.stringify(defaultState));
+    }catch(err){ state = JSON.parse(JSON.stringify(defaultState)); }
+    applyHeader();
+    render();
+  }
+
+  document.getElementById('editToggle').addEventListener('click', () => {
+    editMode = !editMode;
+    sheet.classList.toggle('edit', editMode);
+    document.getElementById('editToggle').textContent = editMode ? 'AMEND RECORD' : 'LOCK RECORD';
+  });
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+  document.getElementById('addFormationBtn').addEventListener('click', () => {
+    state.formations.push({ id:uid('c'), name:'New Formation', sub:'', iconType:'support', units:[] });
+    render(); scheduleSave();
+  });
+  document.querySelectorAll('.add-line-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.manifest[btn.dataset.list].push('');
+      renderManifest(); scheduleSave();
+    });
+  });
+
+  bindHeaderFields();
+  loadState();
+})();
+</script>
+</body>
+</html>
