@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Datasheet Forge</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --void:#15161b;
+  --void-2:#1d1f26;
+  --panel:#22242c;
+  --line:#383b46;
+  --parchment:#ece6d6;
+  --parchment-dark:#dcd3b8;
+  --ink:#201d1a;
+  --steel:#8b8f9c;
+  --crimson:#8a2323;
+  --crimson-bright:#b3392f;
+  --brass:#b9925a;
+  --ok:#5a8a5a;
+}
+
+*{box-sizing:border-box;}
+body{margin:0;background:var(--void);color:var(--parchment);font-family:'Inter',sans-serif;}
+
+/* ---------- App chrome ---------- */
+.app{display:grid;grid-template-columns:400px 1fr;min-height:100vh;}
+@media (max-width:900px){.app{grid-template-columns:1fr;}}
+
+.sidebar{background:var(--void-2);border-right:1px solid var(--line);padding:24px;overflow-y:auto;max-height:100vh;}
+.main{padding:24px;overflow-y:auto;max-height:100vh;}
+
+.brand{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;}
+.brand h1{font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:0.04em;font-size:22px;margin:0;text-transform:uppercase;color:var(--parchment);}
+.brand .tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--brass);letter-spacing:0.12em;}
+.subhead{font-size:12px;color:var(--steel);margin-bottom:20px;line-height:1.5;}
+
+label{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brass);margin:14px 0 5px;}
+label.first{margin-top:0;}
+input[type=text], input[type=number], textarea{
+  width:100%;background:var(--panel);border:1px solid var(--line);color:var(--parchment);
+  padding:8px 10px;border-radius:2px;font-family:'Inter',sans-serif;font-size:13px;
+}
+textarea{resize:vertical;min-height:44px;font-family:'Inter',sans-serif;}
+input:focus, textarea:focus{outline:none;border-color:var(--brass);}
+
+.row6{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+.row6 input{text-align:center;padding:8px 2px;}
+.row6 .lbl{font-size:9px;text-align:center;color:var(--steel);font-family:'IBM Plex Mono',monospace;margin-bottom:3px;}
+
+.weapon-block{border:1px solid var(--line);border-radius:3px;padding:10px;margin-bottom:8px;background:var(--panel);}
+.weapon-grid{display:grid;grid-template-columns:0.6fr 2fr 1fr 0.7fr 1fr 0.7fr 0.7fr 0.7fr auto;gap:5px;margin-bottom:6px;align-items:center;}
+.weapon-grid input{padding:6px 4px;font-size:12px;text-align:center;}
+.weapon-grid input.wname{text-align:left;}
+.ghdr{font-size:8px;color:var(--steel);text-align:center;font-family:'IBM Plex Mono',monospace;}
+.ghdr.left{text-align:left;}
+
+.btn{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.05em;text-transform:uppercase;
+  border:1px solid var(--line);background:var(--panel);color:var(--parchment);padding:8px 12px;
+  border-radius:2px;cursor:pointer;transition:border-color .15s,color .15s;
+}
+.btn:hover{border-color:var(--brass);color:var(--brass);}
+.btn.primary{background:var(--crimson);border-color:var(--crimson);color:#f4ece3;font-weight:600;}
+.btn.primary:hover{background:var(--crimson-bright);border-color:var(--crimson-bright);color:#fff;}
+.btn.small{padding:4px 8px;font-size:10px;}
+.btn.remove{color:#c77;border-color:#5a3a3a;}
+.btn.remove:hover{color:#ff9d9d;border-color:#8a3a3a;}
+.btn-row{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;}
+
+.section-divider{border:none;border-top:1px dashed var(--line);margin:20px 0;}
+
+/* ---------- Roster list ---------- */
+.roster-title{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.05em;font-size:14px;color:var(--parchment);margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;}
+.roster-item{display:flex;justify-content:space-between;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:8px 10px;margin-bottom:6px;}
+.roster-item .ri-name{font-family:'IBM Plex Mono',monospace;font-size:12px;}
+.roster-item .ri-pts{color:var(--brass);font-size:11px;margin-left:6px;}
+.roster-empty{font-size:12px;color:var(--steel);font-style:italic;padding:10px 0;}
+
+/* ---------- Main / preview ---------- */
+.main-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.main-head h2{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.04em;margin:0;font-size:18px;}
+.count-pill{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--void);background:var(--brass);padding:3px 9px;border-radius:20px;margin-left:8px;}
+
+.sheet-stack{display:flex;flex-direction:column;align-items:center;gap:20px;}
+.page{
+  background:var(--parchment);width:8.5in;min-height:11in;padding:0.5in;
+  box-shadow:0 8px 30px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:0.18in;
+}
+
+/* ---------- Card ---------- */
+.card{
+  border:2px solid var(--ink);background:var(--parchment);color:var(--ink);
+  position:relative;padding:10px 14px 12px;
+}
+.card::before,.card::after{
+  content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:var(--brass);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.4);top:6px;
+}
+.card::before{left:6px;}
+.card::after{right:6px;}
+.card .rivet-b1,.card .rivet-b2{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--brass);bottom:6px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4);}
+.card .rivet-b1{left:6px;}
+.card .rivet-b2{right:6px;}
+
+.c-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:4px;}
+.c-head .c-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:19px;text-transform:uppercase;letter-spacing:.01em;}
+.c-head .c-pts{font-family:'IBM Plex Mono',monospace;background:var(--crimson);color:#f4ece3;padding:2px 9px;border-radius:2px;font-size:13px;font-weight:600;white-space:nowrap;}
+.c-faction{font-size:10px;font-style:italic;color:#4a4436;margin:3px 0 6px;font-family:'Inter',sans-serif;}
+
+.stat-table{width:100%;border-collapse:collapse;margin-bottom:7px;}
+.stat-table th{background:var(--ink);color:var(--parchment);font-family:'IBM Plex Mono',monospace;font-size:9.5px;padding:3px 0;text-transform:uppercase;letter-spacing:.05em;}
+.stat-table td{background:var(--parchment-dark);text-align:center;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12.5px;padding:4px 0;border:1px solid #c7bd9e;}
+
+.wpn-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--crimson);text-transform:uppercase;margin:6px 0 2px;}
+.wpn-table{width:100%;border-collapse:collapse;font-size:10.5px;margin-bottom:2px;}
+.wpn-table th{background:#3a352b;color:var(--parchment);font-size:8.5px;text-transform:uppercase;padding:2px 4px;text-align:center;font-family:'IBM Plex Mono',monospace;}
+.wpn-table th:nth-child(2){text-align:left;}
+.wpn-table td{border:1px solid #c7bd9e;padding:2.5px 4px;text-align:center;font-family:'Inter',sans-serif;}
+.wpn-table td:first-child{width:26px;}
+.wpn-table td:nth-child(2){text-align:left;}
+
+.c-abilities{font-size:10px;margin-top:6px;line-height:1.35;}
+.c-abilities .lbl-inline{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--crimson);text-transform:uppercase;letter-spacing:.06em;margin-right:5px;}
+.c-keywords{font-size:9px;color:#4a4436;margin-top:5px;font-style:italic;}
+
+.card.placeholder{display:flex;align-items:center;justify-content:center;color:#a89f83;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;border-style:dashed;min-height:2.9in;}
+
+.empty-state{text-align:center;color:var(--steel);padding:60px 20px;font-size:13px;}
+.empty-state .big{font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:16px;color:var(--parchment);margin-bottom:8px;}
+
+/* ---------- Print ---------- */
+@media print{
+  body{background:#fff;}
+  .sidebar,.main-head,.no-print{display:none !important;}
+  .app{display:block;}
+  .main{padding:0;overflow:visible;max-height:none;}
+  .sheet-stack{gap:0;}
+  .page{box-shadow:none;width:auto;min-height:auto;margin:0;page-break-after:always;}
+  .page:last-child{page-break-after:auto;}
+  @page{size:letter;margin:0.5in;}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===================== SIDEBAR / FORM ===================== -->
+  <div class="sidebar">
+    <div class="brand">
+      <h1>Datasheet Forge</h1>
+    </div>
+    <div class="tag">// ADMINISTRATUM REQUISITION FORM</div>
+    <div class="subhead">Fill in a unit's details, add it to your roster, and the print sheet on the right builds itself &mdash; three datasheets per page.</div>
+
+    <hr class="section-divider" style="margin-top:14px;">
+
+    <label class="first">Unit Name</label>
+    <input type="text" id="f-name" placeholder="e.g. Kasrkin">
+
+    <div style="display:flex; gap:8px;">
+      <div style="flex:1;">
+        <label>Points</label>
+        <input type="text" id="f-points" placeholder="80">
+      </div>
+      <div style="flex:2;">
+        <label>Faction / Keywords line</label>
+        <input type="text" id="f-faction" placeholder="Astra Militarum — Infantry, Imperium">
+      </div>
+    </div>
+
+    <label>Stat Line</label>
+    <div class="row6">
+      <div><div class="lbl">M</div><input type="text" id="s-m" placeholder="6&quot;"></div>
+      <div><div class="lbl">T</div><input type="text" id="s-t" placeholder="3"></div>
+      <div><div class="lbl">SV</div><input type="text" id="s-sv" placeholder="3+"></div>
+      <div><div class="lbl">W</div><input type="text" id="s-w" placeholder="1"></div>
+      <div><div class="lbl">LD</div><input type="text" id="s-ld" placeholder="7+"></div>
+      <div><div class="lbl">OC</div><input type="text" id="s-oc" placeholder="2"></div>
+    </div>
+
+    <label>Ranged Weapons</label>
+    <div id="ranged-list"></div>
+    <div class="btn-row"><button class="btn small" onclick="addWeaponRow('ranged')">+ Add ranged weapon</button></div>
+
+    <label>Melee Weapons</label>
+    <div id="melee-list"></div>
+    <div class="btn-row"><button class="btn small" onclick="addWeaponRow('melee')">+ Add melee weapon</button></div>
+
+    <label>Abilities</label>
+    <textarea id="f-abilities" placeholder="One per line, e.g.&#10;Combat Squads&#10;Special-Issue Ammunition"></textarea>
+
+    <label>Keywords</label>
+    <input type="text" id="f-keywords" placeholder="Infantry, Imperium, Astra Militarum, Kasrkin">
+
+    <div class="btn-row" style="margin-top:18px;">
+      <button class="btn primary" id="save-btn" onclick="saveUnit()">Add to Roster</button>
+      <button class="btn" onclick="clearForm()">Clear Form</button>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="roster-title">Roster <span id="roster-count" class="count-pill">0</span></div>
+    <div id="roster-list"><div class="roster-empty">No units yet — add one above.</div></div>
+  </div>
+
+  <!-- ===================== MAIN / PREVIEW ===================== -->
+  <div class="main">
+    <div class="main-head no-print">
+      <h2>Print Preview</h2>
+      <div class="btn-row">
+        <button class="btn" onclick="loadDemo()">Load Kasrkin example</button>
+        <button class="btn primary" onclick="window.print()">Print / Save PDF</button>
+      </div>
+    </div>
+    <div id="sheet-container"></div>
+  </div>
+
+</div>
+
+<script>
+let units = [];
+let weaponCounters = {ranged:0, melee:0};
+let editingId = null;
+const WPN_HEADERS = ["Qty","Weapon","Range","A","BS/WS","S","AP","D"];
+
+function weaponRowHTML(kind, id){
+  return `
+  <div class="weapon-block" id="wpn-${kind}-${id}" data-kind="${kind}">
+    <div class="weapon-grid">
+      <div class="ghdr">Qty</div><div class="ghdr left">Name</div><div class="ghdr">Rng</div><div class="ghdr">A</div>
+      <div class="ghdr">BS/WS</div><div class="ghdr">S</div><div class="ghdr">AP</div><div class="ghdr">D</div><div></div>
+    </div>
+    <div class="weapon-grid">
+      <input type="text" placeholder="1">
+      <input class="wname" type="text" placeholder="Name">
+      <input type="text" placeholder="24&quot;">
+      <input type="text" placeholder="2">
+      <input type="text" placeholder="3+">
+      <input type="text" placeholder="3">
+      <input type="text" placeholder="-1">
+      <input type="text" placeholder="1">
+      <button class="btn remove small" onclick="this.closest('.weapon-block').remove()">✕</button>
+    </div>
+  </div>`;
+}
+
+function addWeaponRow(kind, prefill){
+  weaponCounters[kind]++;
+  const id = weaponCounters[kind];
+  const container = document.getElementById(kind+'-list');
+  container.insertAdjacentHTML('beforeend', weaponRowHTML(kind, id));
+  if(prefill){
+    const block = document.getElementById(`wpn-${kind}-${id}`);
+    const inputs = block.querySelectorAll('input');
+    prefill.forEach((v,i)=>{ if(inputs[i]) inputs[i].value = v; });
+  }
+}
+
+function collectWeapons(kind){
+  const blocks = document.querySelectorAll(`#${kind}-list .weapon-block`);
+  const out = [];
+  blocks.forEach(b=>{
+    const vals = Array.from(b.querySelectorAll('input')).map(i=>i.value.trim());
+    if(vals.some(v=>v.length)) out.push(vals);
+  });
+  return out;
+}
+
+function clearForm(){
+  ['f-name','f-points','f-faction','s-m','s-t','s-sv','s-w','s-ld','s-oc','f-abilities','f-keywords'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  document.getElementById('ranged-list').innerHTML='';
+  document.getElementById('melee-list').innerHTML='';
+  editingId = null;
+  document.getElementById('save-btn').textContent = 'Add to Roster';
+}
+
+function saveUnit(){
+  const name = document.getElementById('f-name').value.trim();
+  if(!name){ document.getElementById('f-name').focus(); return; }
+  const unit = {
+    id: editingId || (Date.now()+Math.random()).toString(36),
+    name,
+    points: document.getElementById('f-points').value.trim(),
+    faction: document.getElementById('f-faction').value.trim(),
+    stats: {
+      m: document.getElementById('s-m').value.trim(),
+      t: document.getElementById('s-t').value.trim(),
+      sv: document.getElementById('s-sv').value.trim(),
+      w: document.getElementById('s-w').value.trim(),
+      ld: document.getElementById('s-ld').value.trim(),
+      oc: document.getElementById('s-oc').value.trim(),
+    },
+    ranged: collectWeapons('ranged'),
+    melee: collectWeapons('melee'),
+    abilities: document.getElementById('f-abilities').value.trim(),
+    keywords: document.getElementById('f-keywords').value.trim(),
+  };
+  if(editingId){
+    const idx = units.findIndex(u=>u.id===editingId);
+    if(idx>-1) units[idx] = unit;
+  } else {
+    units.push(unit);
+  }
+  persist();
+  clearForm();
+  renderRoster();
+  renderSheets();
+}
+
+function editUnit(id){
+  const u = units.find(x=>x.id===id);
+  if(!u) return;
+  editingId = id;
+  document.getElementById('f-name').value = u.name;
+  document.getElementById('f-points').value = u.points;
+  document.getElementById('f-faction').value = u.faction;
+  document.getElementById('s-m').value = u.stats.m;
+  document.getElementById('s-t').value = u.stats.t;
+  document.getElementById('s-sv').value = u.stats.sv;
+  document.getElementById('s-w').value = u.stats.w;
+  document.getElementById('s-ld').value = u.stats.ld;
+  document.getElementById('s-oc').value = u.stats.oc;
+  document.getElementById('ranged-list').innerHTML='';
+  document.getElementById('melee-list').innerHTML='';
+  u.ranged.forEach(r=>addWeaponRow('ranged', r));
+  u.melee.forEach(r=>addWeaponRow('melee', r));
+  document.getElementById('f-abilities').value = u.abilities;
+  document.getElementById('f-keywords').value = u.keywords;
+  document.getElementById('save-btn').textContent = 'Update Unit';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function deleteUnit(id){
+  units = units.filter(u=>u.id!==id);
+  persist();
+  renderRoster();
+  renderSheets();
+}
+
+function duplicateUnit(id){
+  const u = units.find(x=>x.id===id);
+  if(!u) return;
+  const copy = JSON.parse(JSON.stringify(u));
+  copy.id = (Date.now()+Math.random()).toString(36);
+  copy.name = u.name + ' (copy)';
+  units.push(copy);
+  persist();
+  renderRoster();
+  renderSheets();
+}
+
+function renderRoster(){
+  const el = document.getElementById('roster-list');
+  document.getElementById('roster-count').textContent = units.length;
+  if(units.length===0){
+    el.innerHTML = '<div class="roster-empty">No units yet — add one above.</div>';
+    return;
+  }
+  el.innerHTML = units.map(u=>`
+    <div class="roster-item">
+      <div><span class="ri-name">${escapeHtml(u.name)}</span><span class="ri-pts">${u.points?u.points+'pts':''}</span></div>
+      <div class="btn-row" style="margin:0;">
+        <button class="btn small" onclick="editUnit('${u.id}')">Edit</button>
+        <button class="btn small" onclick="duplicateUnit('${u.id}')">Dupe</button>
+        <button class="btn small remove" onclick="deleteUnit('${u.id}')">Del</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function weaponTableHTML(rows){
+  if(!rows || rows.length===0) return '';
+  const body = rows.map(r=>`<tr>${r.map((c,i)=>`<td>${escapeHtml(c)||'&nbsp;'}</td>`).join('')}</tr>`).join('');
+  return `<table class="wpn-table">
+    <tr>${WPN_HEADERS.map(h=>`<th>${h}</th>`).join('')}</tr>
+    ${body}
+  </table>`;
+}
+
+function cardHTML(u){
+  return `
+  <div class="card">
+    <span class="rivet-b1"></span><span class="rivet-b2"></span>
+    <div class="c-head">
+      <div class="c-name">${escapeHtml(u.name)||'Unit Name'}</div>
+      <div class="c-pts">${u.points ? escapeHtml(u.points)+' PTS' : '&mdash; PTS'}</div>
+    </div>
+    <div class="c-faction">${escapeHtml(u.faction)||'&nbsp;'}</div>
+    <table class="stat-table">
+      <tr><th>M</th><th>T</th><th>SV</th><th>W</th><th>LD</th><th>OC</th></tr>
+      <tr>
+        <td>${escapeHtml(u.stats.m)||'&mdash;'}</td>
+        <td>${escapeHtml(u.stats.t)||'&mdash;'}</td>
+        <td>${escapeHtml(u.stats.sv)||'&mdash;'}</td>
+        <td>${escapeHtml(u.stats.w)||'&mdash;'}</td>
+        <td>${escapeHtml(u.stats.ld)||'&mdash;'}</td>
+        <td>${escapeHtml(u.stats.oc)||'&mdash;'}</td>
+      </tr>
+    </table>
+    ${u.ranged && u.ranged.length ? `<div class="wpn-label">Ranged Weapons</div>${weaponTableHTML(u.ranged)}` : ''}
+    ${u.melee && u.melee.length ? `<div class="wpn-label">Melee Weapons</div>${weaponTableHTML(u.melee)}` : ''}
+    ${u.abilities ? `<div class="c-abilities"><span class="lbl-inline">Abilities</span>${escapeHtml(u.abilities).replace(/\n/g,'<br>')}</div>` : ''}
+    ${u.keywords ? `<div class="c-keywords">${escapeHtml(u.keywords)}</div>` : ''}
+  </div>`;
+}
+
+function renderSheets(){
+  const container = document.getElementById('sheet-container');
+  if(units.length===0){
+    container.innerHTML = `<div class="empty-state"><div class="big">Requisition queue empty</div>Add a unit on the left to see it appear here, ready to print — three datasheets per page.</div>`;
+    return;
+  }
+  const perPage = 3;
+  let html = '<div class="sheet-stack">';
+  for(let i=0;i<units.length;i+=perPage){
+    const chunk = units.slice(i, i+perPage);
+    html += '<div class="page">';
+    chunk.forEach(u=>{ html += cardHTML(u); });
+    html += '</div>';
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+async function persist(){
+  try{
+    await window.storage.set('datasheets', JSON.stringify(units));
+  }catch(e){ console.error('Storage save failed', e); }
+}
+
+async function loadPersisted(){
+  try{
+    const res = await window.storage.get('datasheets');
+    if(res && res.value){
+      units = JSON.parse(res.value);
+    }
+  }catch(e){
+    // no saved data yet, that's fine
+  }
+  renderRoster();
+  renderSheets();
+}
+
+function loadDemo(){
+  document.getElementById('f-name').value = 'Kasrkin';
+  document.getElementById('f-points').value = '80';
+  document.getElementById('f-faction').value = 'Astra Militarum — Infantry, Imperium';
+  document.getElementById('s-m').value = '6"';
+  document.getElementById('s-t').value = '3';
+  document.getElementById('s-sv').value = '3+';
+  document.getElementById('s-w').value = '1';
+  document.getElementById('s-ld').value = '7+';
+  document.getElementById('s-oc').value = '2';
+  document.getElementById('ranged-list').innerHTML='';
+  document.getElementById('melee-list').innerHTML='';
+  addWeaponRow('ranged', ['9','Hot-shot lasgun','24"','2','3+','3','-1','1']);
+  addWeaponRow('ranged', ['1','Hot-shot volley gun','18"','3','3+','4','-1','1']);
+  addWeaponRow('melee', ['10','Combat blade','Melee','3','3+','3','0','1']);
+  document.getElementById('f-abilities').value = 'Combat Squads\nSpecial-Issue Ammunition';
+  document.getElementById('f-keywords').value = 'Infantry, Imperium, Astra Militarum, Kasrkin';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+loadPersisted();
+</script>
+</body>
+</html>
