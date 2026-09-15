@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Munitorum TO&E Builder</title>
+    <style>
+        :root {
+            --bg-dark: #121619;
+            --panel-bg: #1c2328;
+            --border-color: #38454f;
+            --accent-green: #486b53;
+            --accent-gold: #cfa856;
+            --accent-red: #8b3a3a;
+            --text-main: #d1d8dc;
+            --text-dim: #8b9ca7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(0,0,0,0.3);
+            border-left: 3px solid var(--accent-gold);
+            padding: 10px;
+            border-radius: 2px;
+        }
+
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+
+        .stat-card .label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 10px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            background: #0d1013;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            outline: 1px solid var(--accent-gold);
+        }
+
+        button {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            filter: brightness(1.2);
+        }
+
+        button.btn-danger {
+            background: var(--accent-red);
+        }
+
+        button.btn-secondary {
+            background: #38454f;
+        }
+
+        .tree-node {
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.2);
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 4px;
+        }
+
+        .tree-node.company { border-left: 4px solid var(--accent-gold); }
+        .tree-node.platoon { border-left: 4px solid var(--accent-green); margin-left: 20px; }
+        .tree-node.squad { border-left: 4px solid #4a758c; margin-left: 40px; }
+
+        .node-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .node-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .badge-id {
+            background: var(--accent-gold);
+            color: black;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+            font-family: monospace;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Printable / Export View */
+        @media print {
+            .sidebar, .actions-bar, button { display: none !important; }
+            .container { grid-template-columns: 1fr; }
+            body { background: white; color: black; }
+            .panel { border: none; box-shadow: none; background: transparent; }
+            .tree-node { border: 1px solid #ccc; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="actions-bar">
+        <button onclick="addCompany()">+ Add Company</button>
+        <button class="btn-secondary" onclick="exportJSON()">Export JSON</button>
+        <button class="btn-secondary" onclick="importJSON()">Import JSON</button>
+        <button class="btn-secondary" onclick="window.print()">Print / PDF</button>
+        <button class="btn-danger" style="margin-left:auto;" onclick="resetData()">Reset All</button>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar: Regimental Meta & Live Stats -->
+        <div class="sidebar">
+            <div class="panel">
+                <h2>Departmento Munitorum</h2>
+                <p style="font-size:0.8rem; color:var(--text-dim);">Table of Organization & Equipment</p>
+                
+                <label>Regiment Name</label>
+                <input type="text" id="regimentName" value="4th Calinosian Line Infantry" onchange="updateSummary()">
+
+                <label>Founding World</label>
+                <input type="text" id="regimentWorld" value="Calinos Prime" onchange="updateSummary()">
+
+                <label>Tactical Doctrine</label>
+                <select id="regimentDoctrine" onchange="updateSummary()">
+                    <option value="Line Infantry">Standard Line Infantry</option>
+                    <option value="Mechanized">Mechanized Siege</option>
+                    <option value="Armored">Armored Spearhead</option>
+                    <option value="Air Assault">Airborne Recon</option>
+                </select>
+
+                <hr style="border-color:var(--border-color); margin: 20px 0;">
+
+                <h3>Regimental Totals</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="value" id="totalPersonnel">0</div>
+                        <div class="label">Guardsmen</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="totalVehicles">0</div>
+                        <div class="label">Vehicles</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="totalHeavyWeapons">0</div>
+                        <div class="label">Heavy Arms</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Display: Dynamic Hierarchy Tree -->
+        <div class="main-content">
+            <div class="panel">
+                <h2 id="displayRegimentTitle">TO&E Breakdown</h2>
+                <div id="toeTree"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initial Sample Data Structure
+        let toeData = {
+            companies: [
+                {
+                    id: 1,
+                    name: "1st Company (Line Infantry)",
+                    commander: "Capt. Vane",
+                    platoons: [
+                        {
+                            id: 1,
+                            name: "1st Platoon",
+                            leader: "Lt. Vance",
+                            squads: [
+                                { id: 1, name: "Infantry Squad 1", count: 10, weapon: "Lasrifles, 1x Plasma", transport: "None", heavy: 0 },
+                                { id: 2, name: "Infantry Squad 2", count: 10, weapon: "Lasrifles, 1x Meltagun", transport: "None", heavy: 0 },
+                                { id: 3, name: "Heavy Weapon Team", count: 6, weapon: "3x Heavy Bolters", transport: "None", heavy: 3 }
+                            ]
+                        },
+                        {
+                            id: 2,
+                            name: "2nd Platoon (Mechanized)",
+                            leader: "Lt. Kren",
+                            squads: [
+                                { id: 1, name: "Armored Squad 1", count: 10, weapon: "Lasrifles, 1x Grenade Launcher", transport: "Chimera APC", heavy: 0 }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        function renderTree() {
+            const container = document.getElementById('toeTree');
+            container.innerHTML = '';
+
+            let totalGuardsmen = 0;
+            let totalVehicles = 0;
+            let totalHeavyWeapons = 0;
+
+            toeData.companies.forEach((comp, cIdx) => {
+                const compNode = document.createElement('div');
+                compNode.className = 'tree-node company';
+                
+                compNode.innerHTML = `
+                    <div class="node-header">
+                        <div>
+                            <span class="node-title">${comp.name}</span>
+                            <span class="badge-id">C${cIdx + 1}</span>
+                        </div>
+                        <div>
+                            <button onclick="addPlatoon(${cIdx})">+ Add Platoon</button>
+                            <button class="btn-danger" onclick="deleteCompany(${cIdx})">X</button>
+                        </div>
+                    </div>
+                    <div class="field-row">
+                        <div><label>Company Name</label><input type="text" value="${comp.name}" onchange="toeData.companies[${cIdx}].name=this.value; renderTree();"></div>
+                        <div><label>Commander</label><input type="text" value="${comp.commander}" onchange="toeData.companies[${cIdx}].commander=this.value;"></div>
+                    </div>
+                    <div class="platoons-container"></div>
+                `;
+
+                const platoonsContainer = compNode.querySelector('.platoons-container');
+
+                comp.platoons.forEach((plat, pIdx) => {
+                    const platNode = document.createElement('div');
+                    platNode.className = 'tree-node platoon';
+
+                    platNode.innerHTML = `
+                        <div class="node-header">
+                            <div>
+                                <span class="node-title">${plat.name}</span>
+                                <span class="badge-id">P${pIdx + 1}</span>
+                            </div>
+                            <div>
+                                <button onclick="addSquad(${cIdx}, ${pIdx})">+ Add Squad</button>
+                                <button class="btn-danger" onclick="deletePlatoon(${cIdx}, ${pIdx})">X</button>
+                            </div>
+                        </div>
+                        <div class="field-row">
+                            <div><label>Platoon Name</label><input type="text" value="${plat.name}" onchange="toeData.companies[${cIdx}].platoons[${pIdx}].name=this.value; renderTree();"></div>
+                            <div><label>Platoon Leader</label><input type="text" value="${plat.leader}" onchange="toeData.companies[${cIdx}].platoons[${pIdx}].leader=this.value;"></div>
+                        </div>
+                        <div class="squads-container"></div>
+                    `;
+
+                    const squadsContainer = platNode.querySelector('.squads-container');
+
+                    plat.squads.forEach((sqd, sIdx) => {
+                        // Math tallies
+                        totalGuardsmen += parseInt(sqd.count || 0);
+                        if (sqd.transport && sqd.transport.trim().toLowerCase() !== "none" && sqd.transport.trim() !== "") {
+                            totalVehicles += 1;
+                        }
+                        totalHeavyWeapons += parseInt(sqd.heavy || 0);
+
+                        // Tac ID (e.g., 123 = Comp 1, Plt 2, Sqd 3)
+                        const tacID = `${cIdx + 1}${pIdx + 1}${sIdx + 1}`;
+
+                        const sqdNode = document.createElement('div');
+                        sqdNode.className = 'tree-node squad';
+                        sqdNode.innerHTML = `
+                            <div class="node-header">
+                                <div>
+                                    <span class="node-title">${sqd.name}</span>
+                                    <span class="badge-id">Tac ID: ${tacID}</span>
+                                </div>
+                                <button class="btn-danger" onclick="deleteSquad(${cIdx}, ${pIdx}, ${sIdx})">X</button>
+                            </div>
+                            <div class="field-row">
+                                <div><label>Squad Designation</label><input type="text" value="${sqd.name}" onchange="toeData.companies[${cIdx}].platoons[${pIdx}].squads[${sIdx}].name=this.value;"></div>
+                                <div><label>Personnel Count</label><input type="number" value="${sqd.count}" onchange="toeData.companies[${cIdx}].platoons[${pIdx}].squads[${sIdx}].count=parseInt(this.value)||0; updateStats();"></div>
+                                <div><label>Primary Weapons</label><input type="text" value="${sqd.weapon}" onchange="toeData.companies[${cIdx}].platoons[${pIdx}].squads[${sIdx}].weapon=this.value;"></div>
+                                <div><label>Transport / Vehicle</label><input type="text" value="${sqd.transport}" onchange="toeData.companies[${cIdx}].platoons[${pIdx}].squads[${sIdx}].transport=this.value; updateStats();"></div>
+                                <div><label>Heavy Weapon Count</label><input type="number" value="${sqd.heavy}" onchange="toeData.companies[${cIdx}].platoons[${pIdx}].squads[${sIdx}].heavy=parseInt(this.value)||0; updateStats();"></div>
+                            </div>
+                        `;
+                        squadsContainer.appendChild(sqdNode);
+                    });
+
+                    platoonsContainer.appendChild(platNode);
+                });
+
+                container.appendChild(compNode);
+            });
+
+            // Update stats
+            document.getElementById('totalPersonnel').innerText = totalGuardsmen;
+            document.getElementById('totalVehicles').innerText = totalVehicles;
+            document.getElementById('totalHeavyWeapons').innerText = totalHeavyWeapons;
+        }
+
+        function updateSummary() {
+            const name = document.getElementById('regimentName').value;
+            document.getElementById('displayRegimentTitle').innerText = name + " — TO&E";
+        }
+
+        function updateStats() {
+            renderTree();
+        }
+
+        // Data Manipulation Functions
+        function addCompany() {
+            const newId = toeData.companies.length + 1;
+            toeData.companies.push({
+                id: newId,
+                name: `${newId}th Company`,
+                commander: "Officer Unassigned",
+                platoons: []
+            });
+            renderTree();
+        }
+
+        function addPlatoon(cIdx) {
+            const newId = toeData.companies[cIdx].platoons.length + 1;
+            toeData.companies[cIdx].platoons.push({
+                id: newId,
+                name: `${newId}st Platoon`,
+                leader: "Lieutenant Unassigned",
+                squads: []
+            });
+            renderTree();
+        }
+
+        function addSquad(cIdx, pIdx) {
+            const newId = toeData.companies[cIdx].platoons[pIdx].squads.length + 1;
+            toeData.companies[cIdx].platoons[pIdx].squads.push({
+                id: newId,
+                name: `Squad ${newId}`,
+                count: 10,
+                weapon: "M36 Kantrael Lasrifles",
+                transport: "None",
+                heavy: 0
+            });
+            renderTree();
+        }
+
+        function deleteCompany(cIdx) {
+            toeData.companies.splice(cIdx, 1);
+            renderTree();
+        }
+
+        function deletePlatoon(cIdx, pIdx) {
+            toeData.companies[cIdx].platoons.splice(pIdx, 1);
+            renderTree();
+        }
+
+        function deleteSquad(cIdx, pIdx, sIdx) {
+            toeData.companies[cIdx].platoons[pIdx].squads.splice(sIdx, 1);
+            renderTree();
+        }
+
+        function exportJSON() {
+            const exportObj = {
+                meta: {
+                    regiment: document.getElementById('regimentName').value,
+                    world: document.getElementById('regimentWorld').value,
+                    doctrine: document.getElementById('regimentDoctrine').value
+                },
+                data: toeData
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `${exportObj.meta.regiment.replace(/\s+/g, '_')}_TOE.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importJSON() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = e => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.readAsText(file, 'UTF-8');
+                reader.onload = readerEvent => {
+                    const content = JSON.parse(readerEvent.target.result);
+                    if(content.meta && content.data) {
+                        document.getElementById('regimentName').value = content.meta.regiment || '';
+                        document.getElementById('regimentWorld').value = content.meta.world || '';
+                        document.getElementById('regimentDoctrine').value = content.meta.doctrine || 'Line Infantry';
+                        toeData = content.data;
+                        updateSummary();
+                        renderTree();
+                    }
+                }
+            }
+            input.click();
+        }
+
+        function resetData() {
+            if(confirm("Are you sure you want to clear all companies and squads?")) {
+                toeData = { companies: [] };
+                renderTree();
+            }
+        }
+
+        // Initialize
+        updateSummary();
+        renderTree();
+    </script>
+</body>
+</html>
