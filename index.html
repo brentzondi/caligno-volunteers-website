@@ -699,7 +699,9 @@
     </div>
     <h1 class="regiment-name">
       The Calinosian Hellfighters
-      <span class="sub">Calinos System</span>
+      <span class="sub">
+	  <img src="https://github.com/brentzondi/caligno-volunteers-website/blob/main/pics/banneredited.jpg?raw=true" alt="banner" style="max-width: 100%; height: auto;">
+	  </span>
     </h1>
     <div class="motto">"Through hell, Last Out"</div>
 
@@ -1237,6 +1239,97 @@
       renderDispatches(btn.dataset.scopeFilter);
     });
   });
+
+  // ---------- TO&E (static data — edit directly here) ----------
+  // status: active | deployed | refit | mia | kia
+  // quantity: { total: models requisitioned, building: still in production/unfinished }
+  // attachment: company/battalion assignment (logistics, not battlefield location)
+  const unitsByRegiment = {
+    "4th Regiment — Calinosian Hellfighters": {
+      subtitle: "Currently the only regiment raised from Calinos standing and mustering",
+      units: [
+        {
+          name: "Command Squad",
+          role: "Regimental command element",
+          status: "active",
+          attachment: "HQ Element, 7th Company",
+          quantity: { total: 6, building: 0 }
+        },
+        {
+          name: "Hotshots, 1st Squad",
+          role: "Elite close-assault infantry",
+          status: "kia",
+          attachment: "7th Company",
+          quantity: { total: 10, building: 0 }
+        },
+        {
+          name: "Calinosian Hazechargers, 1st & 2nd Squadrons",
+          role: "Mobile shock cavalry",
+          status: "refit",
+          attachment: "7th Company",
+          quantity: { total: 10, building: 2 }
+        },
+        {
+          name: "1st Battalion Line Troops",
+          role: "Main body infantry",
+          status: "deployed",
+          attachment: "1st Battalion",
+          quantity: { total: 40, building: 6 }
+        }
+      ]
+    }
+    // "5th Regiment — [Name]": {
+    //   subtitle: "...",
+    //   units: [ { name: "...", role: "...", status: "...", attachment: "...", quantity: { total: X, building: Y } } ]
+    // },
+  };
+
+  function renderTOE(){
+    const toeContainer = document.getElementById('toe-regiments');
+    if (!toeContainer) return;
+    toeContainer.innerHTML = '';
+
+    Object.entries(unitsByRegiment).forEach(([regimentName, regimentData]) => {
+      const section = document.createElement('div');
+      section.className = 'regiment-section';
+
+      const table = document.createElement('table');
+      table.className = 'oob-table';
+      const tbody = document.createElement('tbody');
+
+      regimentData.units.forEach(u => {
+        const tr = document.createElement('tr');
+        const ready = u.quantity.total - u.quantity.building;
+        const productionBadge = u.quantity.building > 0
+          ? `<span class="stamp production">${u.quantity.building} in production</span>`
+          : '';
+        tr.innerHTML = `
+          <td><div class="unit-name">${u.name}</div><div class="unit-role">${u.role}</div></td>
+          <td><span class="stamp ${u.status}">${u.status}</span></td>
+          <td>
+            <div class="muster-cell">
+              <div class="muster-count">${ready} <span class="of">/ ${u.quantity.total} mustered</span></div>
+              ${productionBadge}
+            </div>
+          </td>
+          <td class="loc">${u.attachment}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      section.innerHTML = `
+        <div class="regiment-section-heading">${regimentName}</div>
+        <div class="regiment-section-sub">${regimentData.subtitle}</div>
+      `;
+      table.innerHTML = `
+        <thead><tr><th>Unit Designation</th><th>Operational Status</th><th>Muster Strength</th><th>Attachment</th></tr></thead>
+      `;
+      table.appendChild(tbody);
+      section.appendChild(table);
+      toeContainer.appendChild(section);
+    });
+  }
+  renderTOE();
 
   // ---------- load all data files, then render everything ----------
   async function loadData(){

@@ -1,0 +1,35 @@
+{
+  "4th Regiment — Calinosian Hellfighters": {
+    "subtitle": "Currently the only regiment raised from Calinos standing and mustering",
+    "units": [
+      {
+        "name": "Command Squad",
+        "role": "Regimental command element",
+        "status": "active",
+        "attachment": "HQ Element, 7th Company",
+        "quantity": { "total": 6, "building": 0 }
+      },
+      {
+        "name": "Hotshots, 1st Squad",
+        "role": "Elite close-assault infantry",
+        "status": "kia",
+        "attachment": "7th Company",
+        "quantity": { "total": 10, "building": 0 }
+      },
+      {
+        "name": "Calinosian Hazechargers, 1st & 2nd Squadrons",
+        "role": "Mobile shock cavalry",
+        "status": "refit",
+        "attachment": "7th Company",
+        "quantity": { "total": 10, "building": 2 }
+      },
+      {
+        "name": "1st Battalion Line Troops",
+        "role": "Main body infantry",
+        "status": "deployed",
+        "attachment": "1st Battalion",
+        "quantity": { "total": 40, "building": 6 }
+      }
+    ]
+  }
+}
