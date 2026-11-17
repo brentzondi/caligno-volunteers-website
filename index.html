@@ -556,7 +556,42 @@
   }
 
   /* ============ CODEX / HISTORY ============ */
-  .codex-block{margin-bottom:36px;}
+  .codex-block{margin-bottom:18px;}
+  .codex-controls{display:flex;gap:8px;margin-bottom:22px;}
+  .codex-controls button{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    background:transparent;
+    border:1px solid var(--olive-line);
+    color:var(--paper-dim);
+    padding:6px 12px;
+    cursor:pointer;
+  }
+  .codex-controls button:hover{border-color:var(--amber);color:var(--amber);}
+  .codex-block h3.codex-toggle{
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:0;
+    user-select:none;
+    transition:color .15s ease;
+  }
+  .codex-block h3.codex-toggle:hover{color:var(--rust-bright);}
+  .codex-block h3.codex-toggle:focus-visible{outline:1px solid var(--amber);outline-offset:4px;}
+  .codex-block h3.codex-toggle::after{
+    content:'+';
+    font-family:var(--font-mono);
+    font-size:20px;
+    color:var(--paper-dim);
+    flex-shrink:0;
+  }
+  .codex-block.open h3.codex-toggle::after{content:'\2212';}
+  .codex-body{display:none;padding-top:16px;}
+  .codex-block.open .codex-body{display:block;}
   .codex-block h3{
     font-family:var(--font-display);
     font-size:18px;
@@ -722,7 +757,7 @@
   </nav>
 
   <!-- ===================== HOME ===================== -->
-  <section class="panel active" id="home">
+  <section class="panel" id="home">
     <h2 class="section-title">Active Campaigns &amp; Latest News</h2>
     <p class="section-sub">Current regimental commitments and command directives, updated as operations develop.</p>
 
@@ -982,7 +1017,7 @@
   </section>
 
   <!-- ===================== DISPATCHES ===================== -->
-  <section class="panel" id="dispatches">
+  <section class="panel active" id="dispatches">
     <h2 class="section-title">Dispatches — Calinos &amp; The Wider Imperium</h2>
     <p class="section-sub">Astropathic and Munitorum bulletins bearing on the regiment — homeworld developments, sector directives, and Imperium-wide news relevant to standing orders.</p>
 
@@ -1029,6 +1064,58 @@
   if (initialHash && document.getElementById(initialHash) && document.querySelector(`nav.tabs button[data-panel="${initialHash}"]`)) {
     activateTab(initialHash, false);
   }
+
+  // ---------- Codex: collapsible sections ----------
+  // Every .codex-block in the Codex tab becomes collapsible automatically, using its
+  // first <h3> as the clickable header. To start a section expanded, add class "open"
+  // to its <div class="codex-block">.
+  (function initCodexAccordion(){
+    const codex = document.getElementById('codex');
+    if (!codex) return;
+    const blocks = Array.from(codex.querySelectorAll('.codex-block'));
+
+    function setOpen(block, open){
+      block.classList.toggle('open', open);
+      const h = block.querySelector(':scope > .codex-toggle');
+      if (h) h.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    blocks.forEach(block => {
+      const heading = Array.from(block.children).find(el => el.tagName === 'H3');
+      if (!heading) return;
+
+      const body = document.createElement('div');
+      body.className = 'codex-body';
+      Array.from(block.childNodes).forEach(node => {
+        if (node !== heading) body.appendChild(node);
+      });
+      block.appendChild(body);
+
+      heading.classList.add('codex-toggle');
+      heading.setAttribute('role', 'button');
+      heading.setAttribute('tabindex', '0');
+      setOpen(block, block.classList.contains('open'));
+
+      heading.addEventListener('click', () => setOpen(block, !block.classList.contains('open')));
+      heading.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setOpen(block, !block.classList.contains('open'));
+        }
+      });
+    });
+
+    const controls = document.createElement('div');
+    controls.className = 'codex-controls';
+    controls.innerHTML = '<button type="button" data-codex="expand">Expand all</button><button type="button" data-codex="collapse">Collapse all</button>';
+    controls.addEventListener('click', e => {
+      const action = e.target.dataset && e.target.dataset.codex;
+      if (!action) return;
+      blocks.forEach(b => setOpen(b, action === 'expand'));
+    });
+    const sub = codex.querySelector('.section-sub');
+    if (sub) sub.insertAdjacentElement('afterend', controls);
+  })();
 
   // ---------- chronicle data ----------
   // ---------- chronicle data (loaded from data/entries.json) ----------
