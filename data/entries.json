@@ -1,4 +1,19 @@
 [
+  {
+    "type": "Vox Traffic",
+    "title": "CALINOSIAN COMMAND CHANNEL: From 2nd Battalion to 1st Battalion",
+    "date": "2026-11-17",
+    "body": "<p class=\"vox-line\"><span class=\"speaker brenticles\">CAPT. BRENTICLES:</span> <span class=\"dialogue\">\"Varro, check your grid. You're turning south away from the Deathmire Corridor. Tell me that's an auspex error.\"</span></p><p class=\"vox-line\"><span class=\"speaker varro\">CAPT. VARRO:</span> <span class=\"dialogue\">\"There's a civil-defense distress burst coming out of a Sub-Hab. Fifteen hundred factorum workers trapped behind the blast doors with Ork kommandos burning through. I'm pulling them out.\"</span></p><p class=\"vox-line\"><span class=\"speaker brenticles\">CAPT. BRENTICLES:</span> <span class=\"dialogue\">\"That area is sealed under Directive 88! High Command has written them them off six hours ago as expendable. You need to let them go Varro.\"</span></p><p class=\"vox-line\"><span class=\"speaker varro\">CAPT. VARRO:</span> <span class=\"dialogue\">\"If we won't hold the line for Imperial citizens, what are we fighting on this ash-heap for?\"</span></p><p class=\"vox-line\"><span class=\"speaker brenticles\">CAPT. BRENTICLES:</span> <span class=\"dialogue\">\"Drop the heroics! We are a fresh formation—barely off the troopships, zero combat honors, zero political capital in this sector. The Commissariat is already looking for scapegoats for the eastern flank collapsing. If you divert a full battalion off-mission to play savior for unprioritized civilians already, Sector Command won't give you a medal. They’ll brand the entire regiment incompetent at best, and mutinous at worst.\"</span></p><p class=\"vox-line\"><span class=\"speaker varro\">CAPT. VARRO:</span>\"I'm not leaving them to the Greenskins. Hold the northern flank—give me 12 hours.\"</span></p><p class=\"vox-line\"><span class=\"speaker brenticles\">CAPT. BRENTICLES:</span> <em class=\"sfx\">[Quiet, tight]</em> <span class=\"dialogue\">\"Don't do this Varro </em>\"</span></p><p class=\"vox-line\"><span class=\"speaker varro\">CAPT. VARRO:</span> <span class=\"dialogue\">\"Noted. Vanguard out.\"</span></p><p class=\"vox-system-note\"></p>",
+    "vox": true
+  },
+	{
+    "type": "Soldier's Journal",
+    "title": "Entry — Motto in Honor of Hotshot Voss",
+    "date": "2026-09-09",
+    "meta": "FILED BY: CPT Brenticles · CLEARANCE: PERSONAL",
+    "body": "I've been hearing some of the men parting with the phrase <em><q>Through Hell</q></em> responded by <em><q>Last Out</q></em> to each other when going on patrols and missions. I'm assuming the last vox exchange I had with Lt Voss is being repeated in memory and honor of him. I may take the step to take on this phrase for the regiments motto. I will discuss further with command.",
+    "journal": true
+	},
 	{
     "type": "Soldier's Journal",
     "title": "Entry — Motto in Honor of Hotshot Voss",
